@@ -1,0 +1,81 @@
+.contacts {
+  background: #000000;
+  min-height: 100vh;
+  padding: 160px 48px 80px;
+  display: flex;
+  justify-content: flex-start;
+  color: #ffffff;
+}
+
+.container {
+  max-width: 1000px;
+  width: 100%;
+}
+
+.title {
+  font-size: 5rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 80px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 24px 0;
+  border-bottom: 1px solid #222222;
+  text-decoration: none;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.item:hover {
+  border-bottom-color: #ffffff;
+  padding-left: 20px;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #888888;
+  transition: color 0.3s ease;
+}
+
+.item:hover .label {
+  color: #ffffff;
+}
+
+.value {
+  font-size: 1.8rem;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+/* Акцентные цвета при наведении (можно заменить на синий #2957ff, если хочешь) */
+.item:hover .value {
+  color: #d00000; 
+}
+
+@media (max-width: 768px) {
+  .contacts { padding: 120px 24px 60px; }
+  .title { font-size: 3.5rem; margin-bottom: 48px; }
+  
+  .item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px 0;
+  }
+  
+  .value { font-size: 1.4rem; }
+}

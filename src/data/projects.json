@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "ACCENT",
+    "slug": "accent",
+    "year": "2026",
+    "category": "Branding",
+    "cover": "accent/cover.jpg",
+    "gallery": ["accent/1.jpg", "accent/2.jpg", "accent/3.jpg"]
+  },
+  {
+    "id": 2,
+    "title": "NOW IS BETTER",
+    "slug": "now-is-better",
+    "year": "2025",
+    "category": "Book Design",
+    "cover": "now-is-better/cover.jpg",
+    "gallery": ["now-is-better/1.jpg", "now-is-better/2.jpg"]
+  }
+]

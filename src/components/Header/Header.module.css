@@ -1,0 +1,19 @@
+.header {
+  position: fixed; top: 0; left: 0; width: 100%;
+  padding: 28px 48px; display: flex; justify-content: space-between;
+  align-items: center; z-index: 1000;
+  background: transparent; transition: all 0.4s ease;
+  color: #ffffff; font-family: 'Inter', sans-serif; text-transform: uppercase;
+}
+
+.scrolled {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px); /* Стеклянный эффект */
+  padding: 16px 48px;
+}
+
+.nav a {
+  color: #fff; text-decoration: none; margin-left: 32px; font-weight: 500;
+  letter-spacing: 0.05em; transition: color 0.3s;
+}
+.nav a:hover { color: #d00000; }
