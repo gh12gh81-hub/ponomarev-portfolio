@@ -82,6 +82,51 @@
     ]
   },
   {
+    "id": 3,
+    "title": "SBER EA Pharmacy",
+    "slug": "sber-ea-pharmacy",
+    "year": "2026",
+    "category": "Packaging Design",
+    "services": [
+      "packaging"
+    ],
+    "translations": {
+      "ru": {
+        "client": "СберЕАПТЕКА",
+        "description": "Концепция упаковки БАД с современной медицинской айдентикой.",
+        "challenge": "Разработать упаковку БАД, которая внушает доверие, выглядит современно и соответствует строгим медицинским стандартам.",
+        "solution": "Использована чистая типографика, микро-графика и строгая цветовая палитра, чтобы подчеркнуть премиальное качество продукта."
+      },
+      "en": {
+        "client": "SberEAPharmacy",
+        "description": "Concept of dietary supplement packaging with modern medical identity.",
+        "challenge": "Develop dietary supplement packaging that inspires trust, looks modern, and meets strict medical standards.",
+        "solution": "Clean typography, micro-graphics and a strict color palette were used to highlight the premium quality of the product."
+      }
+    },
+    "description": "Концепция упаковки БАД с современной медицинской айдентикой.",
+    "layout": "tall",
+    "client": "СберЕАПТЕКА",
+    "tools": "Illustrator, Photoshop, Figma, InDesign",
+    "challenge": "Разработать упаковку БАД, которая внушает доверие, выглядит современно и соответствует строгим медицинским стандартам.",
+    "solution": "Использована чистая типографика, микро-графика и строгая цветовая палитра, чтобы подчеркнуть премиальное качество продукта.",
+    "cover": "aptek1_spoyba.jpg",
+    "hero": "aptek1_spoyba.jpg",
+    "banner": "",
+    "gallery": [
+      "fon2_hqqimd.jpg",
+      "13_yplbeh.jpg",
+      "15_dmxrtz.jpg",
+      "12_ml2g4r.png",
+      "alt_eqxepd.png",
+      "43_nbvduc.png",
+      "D3_cli1jr.jpg",
+      "planshet_u5x3pj.png",
+      "23_ad7yeh.jpg",
+      "vitrina_1_kywljp.jpg"
+    ]
+  },
+  {
     "id": 5,
     "title": "ARC’TERYX",
     "slug": "arc-teryx",
@@ -126,51 +171,6 @@
       "1011_a0bhqj.jpg",
       "1112_pdezup.jpg",
       "1213_txbrqk.jpg"
-    ]
-  },
-  {
-    "id": 3,
-    "title": "SBER EA Pharmacy",
-    "slug": "sber-ea-pharmacy",
-    "year": "2026",
-    "category": "Packaging Design",
-    "services": [
-      "packaging"
-    ],
-    "translations": {
-      "ru": {
-        "client": "СберЕАПТЕКА",
-        "description": "Концепция упаковки БАД с современной медицинской айдентикой.",
-        "challenge": "Разработать упаковку БАД, которая внушает доверие, выглядит современно и соответствует строгим медицинским стандартам.",
-        "solution": "Использована чистая типографика, микро-графика и строгая цветовая палитра, чтобы подчеркнуть премиальное качество продукта."
-      },
-      "en": {
-        "client": "SberEAPharmacy",
-        "description": "Concept of dietary supplement packaging with modern medical identity.",
-        "challenge": "Develop dietary supplement packaging that inspires trust, looks modern, and meets strict medical standards.",
-        "solution": "Clean typography, micro-graphics and a strict color palette were used to highlight the premium quality of the product."
-      }
-    },
-    "description": "Концепция упаковки БАД с современной медицинской айдентикой.",
-    "layout": "tall",
-    "client": "СберЕАПТЕКА",
-    "tools": "Illustrator, Photoshop, Figma, InDesign",
-    "challenge": "Разработать упаковку БАД, которая внушает доверие, выглядит современно и соответствует строгим медицинским стандартам.",
-    "solution": "Использована чистая типографика, микро-графика и строгая цветовая палитра, чтобы подчеркнуть премиальное качество продукта.",
-    "cover": "aptek1_spoyba.jpg",
-    "hero": "aptek1_spoyba.jpg",
-    "banner": "",
-    "gallery": [
-      "fon2_hqqimd.jpg",
-      "13_yplbeh.jpg",
-      "15_dmxrtz.jpg",
-      "12_ml2g4r.png",
-      "alt_eqxepd.png",
-      "43_nbvduc.png",
-      "D3_cli1jr.jpg",
-      "planshet_u5x3pj.png",
-      "23_ad7yeh.jpg",
-      "vitrina_1_kywljp.jpg"
     ]
   },
   {
@@ -332,7 +332,7 @@
       }
     },
     "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
-    "layout": "square",
+    "layout": "wide",
     "client": "Кинотеатр Пионер",
     "tools": "Illustrator, Photoshop, InDesign",
     "challenge": "Подобрать шрифтовую пару для кинотеатра, которая выглядит ретро и современно одновременно.",
