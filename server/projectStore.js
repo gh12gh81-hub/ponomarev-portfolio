@@ -189,7 +189,7 @@ export async function saveProjectsForAdmin(value) {
   return {
     projects,
     source: 'github',
-    deploymentPending: true,
+    deploymentPending: false,
     commitUrl: payload.commit?.html_url || null,
   }
 }

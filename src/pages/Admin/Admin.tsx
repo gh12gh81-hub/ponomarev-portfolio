@@ -273,8 +273,8 @@ export default function Admin() {
       setProjects(hydrated)
       setBaseline(JSON.stringify(hydrated))
       setSource(result.source)
-      setNotice(result.deploymentPending
-        ? 'Сохранено в GitHub. Vercel публикует изменения — обычно это занимает около минуты.'
+      setNotice(result.source === 'github'
+        ? 'Сохранено в GitHub. Изменения появятся на сайте после обновления страницы — обычно в течение 30 секунд.'
         : 'Сохранено локально. Изменения уже доступны в dev-версии.')
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : 'Не удалось сохранить проекты.')
