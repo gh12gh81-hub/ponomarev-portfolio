@@ -1,74 +1,155 @@
 .detail { background-color: #000; color: #fff; min-height: 100vh; }
 
-/* --- Cover --- */
-.cover {
-  position: relative; width: 100%; height: 100vh; overflow: hidden;
+/* --- ТЕКСТОВЫЙ БЛОК --- */
+.headerInfo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 160px 48px 0 48px;
 }
-.cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.coverGradient {
-  position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
-  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
-  pointer-events: none;
-}
-.coverInfo {
-  position: absolute; bottom: 80px; left: 80px; z-index: 2; max-width: 800px;
-}
-.coverMeta { display: flex; font-size: 1.1rem; letter-spacing: 0.05em; opacity: 0.7; margin-bottom: 12px; }
-.title { font-size: 5rem; font-weight: 300; letter-spacing: -0.02em; margin: 0 0 24px 0; line-height: 1.1; }
-.description { font-size: 1.25rem; line-height: 1.6; color: #e0e0e0; max-width: 550px; font-weight: 300; }
 
-/* --- Text Hero --- */
-.textHero {
-  height: 70vh; display: flex; align-items: center; justify-content: flex-start;
-  padding: 0 48px; background: #000;
+.coverMeta { 
+  display: flex; 
+  font-size: 1.1rem; 
+  letter-spacing: 0.05em; 
+  color: #999; 
+  margin-bottom: 16px; 
 }
-.textHeroContent { max-width: 800px; }
 
-/* --- Story Block --- */
-.storyBlock {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-  padding: 100px 48px; max-width: 1400px; margin: 0 auto;
+.title { 
+  font-size: 5rem; 
+  font-weight: 300; 
+  letter-spacing: -0.02em; 
+  margin: 0 0 32px 0; 
+  line-height: 1.1; 
 }
-.storyItem h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; color: #777; margin-bottom: 16px; }
-.storyItem p { font-size: 1.2rem; line-height: 1.6; color: #ccc; font-weight: 300; }
 
-/* --- Meta Info --- */
-.metaBlock {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-  padding: 0 48px 80px; max-width: 1400px; margin: 0 auto;
+.description { 
+  font-size: 1.4rem; 
+  line-height: 1.6; 
+  color: #ccc; 
+  max-width: 650px; 
+  font-weight: 300; 
+  margin-bottom: 0;
 }
-.metaItem h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: #555; margin-bottom: 8px; }
-.metaItem p { font-size: 1.1rem; color: #fff; font-weight: 300; }
 
-/* --- Gallery --- */
+/* --- ЕДИНАЯ СЕТКА ИНФОРМАЦИИ (Client, Tools, Challenge, Solution) --- */
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px 80px;
+  max-width: 1200px;
+  margin: 80px auto 0; 
+  padding: 0 48px 60px;
+}
+
+.infoItem h2 {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.infoItem p {
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --- HERO ИЗОБРАЖЕНИЕ --- */
+.heroImage {
+  width: 100%;
+  margin-top: 80px;
+}
+
+.heroImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* --- ГАЛЕРЕЯ --- */
 .gallery {
-  display: flex; flex-direction: column; gap: 60px;
-  padding: 0 0 120px 0; width: 100%;
+  display: flex; 
+  flex-direction: column; 
+  gap: 60px;
+  padding: 0 0 120px 0; 
+  width: 100%;
+  margin-top: 80px;
 }
+
 .galleryItemFull { 
-  width: 100%; max-width: 1400px; margin: 0 auto; 
-  cursor: zoom-in; padding: 0 48px; 
+  display: block;
+  width: 100%; 
+  max-width: 1600px; 
+  margin: 0 auto; 
+  cursor: zoom-in; 
+  padding: 0 48px; 
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
 }
+
 .galleryItemHalf { 
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; 
-  padding: 0 48px; max-width: 1400px; margin: 0 auto; width: 100%;
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 40px; 
+  padding: 0 48px; 
+  max-width: 1600px; 
+  margin: 0 auto; 
+  width: 100%;
 }
-.clickableImage { cursor: zoom-in; }
+
+.clickableImage {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: zoom-in;
+}
+.clickableImage:focus-visible,
+.galleryItemFull:focus-visible {
+  outline: 2px solid #d00000;
+  outline-offset: 4px;
+}
 .galleryItemFull img, .galleryItemHalf img { width: 100%; height: auto; display: block; }
 
-/* --- Next Project --- */
+/* --- СЛЕДУЮЩИЙ ПРОЕКТ --- */
 .nextProject {
-  padding: 60px 48px 120px; border-top: 1px solid #222; max-width: 1400px; margin: 0 auto;
+  padding: 60px 48px 120px; 
+  border-top: 1px solid #222; 
+  max-width: 1400px; 
+  margin: 0 auto;
 }
-.nextProject a {
-  display: flex; justify-content: space-between; align-items: center;
-  color: #fff; text-decoration: none; font-size: 2.5rem; font-weight: 300;
-  transition: 0.3s; padding: 20px 0;
-}
-.nextProject a:hover { color: #d00000; }
-.nextProject span { font-size: 1rem; color: #888; }
 
-/* --- Lightbox (со слайдером) --- */
+.nextProject a {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  color: #fff; 
+  text-decoration: none; 
+  font-size: 2.5rem; 
+  font-weight: 300;
+  transition: 0.3s; 
+  padding: 20px 0;
+}
+
+.nextProjectLabel { font-size: 1rem; color: #888; transition: color 0.25s ease; }
+.nextProjectTitle { font-size: inherit; color: #fff; transition: color 0.25s ease; }
+.nextProjectLabel:hover,
+.nextProjectLabel:active,
+.nextProjectTitle:hover,
+.nextProjectTitle:active { color: #d00000; }
+
+/* --- ЛАЙТБОКС --- */
 .lightbox {
   position: fixed; inset: 0; 
   width: 100vw; height: 100vh;
@@ -76,80 +157,157 @@
   z-index: 9999;
   display: flex; align-items: center; justify-content: center;
 }
+.navZone { position: absolute; top: 0; bottom: 0; width: 20%; z-index: 10; display: block; padding: 0; border: 0; background: transparent; }
+.navZone:focus-visible { outline: 1px solid #d00000; outline-offset: -4px; }
+.navLeft {
+  left: 0;
+  cursor: w-resize;
+}
+.navRight {
+  right: 0;
+  cursor: e-resize;
+}
 
-/* Зоны для кликов (слайдер) */
-.navZone {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 30%;
-  z-index: 10;
-  display: flex;
+.lightboxContent { position: relative; width: 95vw; height: 85vh; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 5; }
+.lightboxSlide { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; }
+.lightboxSlide img { width: 100%; height: 100%; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,0.8); border-radius: 4px; pointer-events: none; }
+.closeBtn { display: none; position: absolute; top: 40px; right: 40px; background: transparent; border: none; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 10000; transition: 0.3s; }
+.closeBtn:hover,
+.closeBtn:focus-visible,
+.closeBtn:active { color: #d00000; }
+
+.glassCursor {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 56px;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.navZone:hover { opacity: 1; }
-.navLeft { left: 0; }
-.navRight { right: 0; }
-
-.navArrow {
-  font-size: 4rem;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.34);
   border-radius: 50%;
-  width: 60px; height: 60px;
-  display: flex; align-items: center; justify-content: center;
-  backdrop-filter: blur(4px);
-  user-select: none;
+  color: #d00000;
+  background:
+    radial-gradient(circle at 31% 19%, rgba(255, 255, 255, 0.28), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(208, 0, 0, 0.16) 52%, rgba(110, 0, 0, 0.08));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -8px 16px rgba(120, 0, 0, 0.08),
+    0 8px 24px rgba(208, 0, 0, 0.18),
+    0 0 0 1px rgba(208, 0, 0, 0.12);
+  backdrop-filter: blur(16px) saturate(165%);
+  -webkit-backdrop-filter: blur(16px) saturate(165%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease, width 160ms ease, height 160ms ease;
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+  will-change: transform, opacity;
+  z-index: 10001;
 }
 
-/* Само изображение (Клик = закрытие) */
-.lightboxContent {
-  max-width: 95vw; max-height: 85vh;
-  width: auto; height: auto;
-  display: flex; justify-content: center; align-items: center;
-  cursor: pointer; /* Указывает, что по клику закрывается */
-  z-index: 5;
+.glassCursor::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: inherit;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), transparent 42%);
+  pointer-events: none;
 }
-.lightboxContent img {
-  width: 100%; height: auto;
-  max-height: 85vh; object-fit: contain;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+
+.glassCursorIcon {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 26px;
+  height: 26px;
+  filter: drop-shadow(0 1px 4px rgba(72, 0, 0, 0.32));
+}
+
+.glassCursorVisible { opacity: 1; }
+
+@media (min-width: 769px) and (hover: hover) and (pointer: fine) {
+  .navZone,
+  .lightboxContent { cursor: none; }
+
+  .glassCursor { display: flex; }
+}
+
+/* --- ЗАГРУЗКА И ОШИБКИ --- */
+.loading {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #aaa;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+}
+
+.errorState {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.errorState p {
+  font-size: 1.2rem;
+  margin-bottom: 24px;
+  color: #ccc;
+}
+
+.retryBtn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 12px 32px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
   border-radius: 4px;
-  pointer-events: none; /* Чтобы клик проходил на обертку */
 }
 
-.closeBtn {
-  position: absolute; top: 40px; right: 40px;
-  background: transparent; border: none;
-  color: #fff; font-size: 2.5rem; cursor: pointer;
-  z-index: 10000; transition: 0.3s;
+.retryBtn:hover {
+  background: #fff;
+  color: #000;
 }
-.closeBtn:hover { color: #d00000; }
 
-/* --- NotFound --- */
+/* --- 404 --- */
 .notFound { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .notFound h2 { font-size: 3rem; font-weight: 300; margin-bottom: 24px; }
 .backLink { color: #fff; text-decoration: none; font-size: 1rem; border-bottom: 1px solid #555; transition: 0.3s; }
 .backLink:hover { border-bottom-color: #fff; }
 
-/* --- Mobile adapt --- */
+/* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
 @media (max-width: 768px) {
-  .cover { height: 70vh; }
-  .coverInfo { bottom: 40px; left: 24px; max-width: 90%; }
-  .title { font-size: 2.8rem; }
-  .description { font-size: 1rem; max-width: 100%; }
-  .textHero { padding: 0 24px; }
-  .storyBlock, .metaBlock { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
-  .gallery { gap: 30px; padding-bottom: 60px; }
+  .headerInfo { padding: 120px 24px 0 24px; }
+  .title { font-size: 3rem; }
+  .description { font-size: 1.1rem; max-width: 100%; }
+  
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 0 24px 30px;
+    margin-top: 40px;
+  }
+
+  .heroImage { margin-top: 40px; }
+  .gallery { gap: 30px; padding-bottom: 60px; margin-top: 40px; }
   .galleryItemHalf { grid-template-columns: 1fr; gap: 20px; padding: 0 24px; }
   .galleryItemFull { padding: 0 24px; }
   .nextProject { padding: 40px 24px 80px; }
   .nextProject a { font-size: 1.8rem; flex-direction: column; align-items: flex-start; gap: 10px; }
-  .closeBtn { top: 20px; right: 20px; font-size: 2rem; }
-  .lightboxContent { max-width: 98vw; max-height: 70vh; }
-  .navZone { width: 40%; }
-  .navArrow { font-size: 2.5rem; width: 40px; height: 40px; }
+  .closeBtn { display: block; top: 20px; right: 20px; color: #fff; font-size: 2rem; }
+  .lightboxContent {
+    width: 98vw;
+    height: 70vh;
+    touch-action: pan-y;
+  }
+  .navZone { display: none; }
 }

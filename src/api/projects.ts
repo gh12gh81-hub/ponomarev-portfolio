@@ -1,9 +1,10 @@
 import { apiClient } from './client';
+import type { Project } from '@/types';
 
-export const getProjects = async () => {
+export const getProjects = async (): Promise<Project[]> => {
   // Если мы на Vercel (продакшен) — стучимся в Serverless функцию
   if (import.meta.env.PROD) {
-    const response = await apiClient.get('/api/projects');
+    const response = await apiClient.get<Project[]>('/api/projects');
     return response.data;
   }
 
@@ -14,5 +15,5 @@ export const getProjects = async () => {
     throw new Error('Не удалось загрузить данные локально');
   }
   
-  return response.json();
+  return response.json() as Promise<Project[]>;
 };

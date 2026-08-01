@@ -6,7 +6,13 @@
 }
 
 .main {
-  /* Чтобы шапка не перекрывала контент */
-  padding-top: 0; 
+  /* Убираем padding-top, чтобы не дублировать отступы страниц */
+  padding-top: 0;
   min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding-top: 0;
+  }
 }

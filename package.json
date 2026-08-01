@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:admin": "node scripts/admin-dev-server.mjs",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "admin:hash": "node scripts/generate-admin-password.mjs",
+    "admin:verify": "node scripts/verify-admin.mjs"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",

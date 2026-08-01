@@ -1,27 +1,36 @@
-# vite-template-redux
+# Nikolai Ponomarev — Portfolio
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+Персональное портфолио на React, TypeScript и Vite. Публичная версия получает проекты из `public/data/projects.json`, изображения доставляются через Cloudinary, публикация выполняется на Vercel.
+
+## Запуск
 
 ```sh
-npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
+npm install
+npm run dev
 ```
 
-## Goals
+Production-сборка:
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+```sh
+npm run build
+```
 
-## Scripts
+## Админ-панель
 
-- `dev`/`start` - start dev server and open browser
-- `build` - build for production
-- `preview` - locally preview production build
-- `test` - launch test runner
+Защищённый редактор доступен по адресу `/admin-portfolio` и намеренно отсутствует в навигации сайта.
 
-## Inspiration
+Для локальной разработки вместе с административными API:
 
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)
+```sh
+npm run dev:admin
+```
+
+Подробная настройка пароля, Cloudinary, GitHub и Vercel находится в [ADMIN.md](./ADMIN.md).
+
+Проверка серверной логики админ-панели:
+
+```sh
+npm run admin:verify
+```
+
+Ручной формат данных проектов описан в [PROJECTS.md](./PROJECTS.md).

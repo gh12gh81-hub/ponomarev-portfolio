@@ -1,142 +1,291 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, type MouseEvent as ReactMouseEvent, type TouchEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CloudinaryImage } from '@/components/CloudinaryImage/CloudinaryImage';
-import { RootState } from '@/store';
+import { Seo } from '@/components/Seo/Seo';
+import { useTranslation } from '@/contexts/LanguageContext';
+import { typography } from '@/utils/typography';
+import { fetchProjects } from '@/features/projectsSlice';
+import { AppDispatch, RootState } from '@/store';
 import styles from './ProjectDetail.module.css';
+
+const MOBILE_BREAKPOINT = 768;
+const SWIPE_THRESHOLD = 50;
+type LightboxCursorAction = 'prev' | 'next' | 'close';
+const lightboxSlideVariants = {
+  enter: (direction: number) => ({ x: direction > 0 ? '100%' : '-100%' }),
+  center: { x: 0 },
+  exit: (direction: number) => ({ x: direction > 0 ? '-100%' : '100%' }),
+};
 
 export default function ProjectDetail() {
   const { slug } = useParams();
-  const projects = useSelector((state: RootState) => state.projects.items);
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const { items: projects, status } = useSelector((state: RootState) => state.projects);
+  const { t, language } = useTranslation();
+
   const project = projects.find(p => p.slug === slug);
   const currentIndex = projects.findIndex(p => p.slug === slug);
   const nextProject = projects[(currentIndex + 1) % projects.length];
+  const galleryImages = project?.gallery.filter(
+    img => img !== project.hero && img !== project.cover
+  ) ?? [];
 
-  // Состояния для лайтбокса и слайдера
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [lightboxSrc, setLightboxSrc] = useState('');
+  const [slideDirection, setSlideDirection] = useState(1);
+  const [lightboxCursor, setLightboxCursor] = useState<LightboxCursorAction | null>(null);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const didSwipe = useRef(false);
+  const glassCursorRef = useRef<HTMLDivElement | null>(null);
 
-  // Блокировка скролла (безопасная для Lenis)
   useEffect(() => {
-    if (lightboxOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-    } else {
-      const scrollY = parseInt(document.body.style.top || '0', 10) * -1;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollY);
+    if (status === 'idle') {
+      dispatch(fetchProjects());
+    }
+  }, [status, dispatch]);
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousBodyPaddingRight = document.body.style.paddingRight;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     }
 
     return () => {
-      const scrollY = parseInt(document.body.style.top || '0', 10) * -1;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = previousBodyOverflow;
+      document.body.style.paddingRight = previousBodyPaddingRight;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [lightboxOpen]);
 
-  // Открыть лайтбокс по индексу картинки
   const openLightbox = (index: number) => {
+    setSlideDirection(1);
     setCurrentImgIndex(index);
+    setLightboxSrc(galleryImages[index]);
     setLightboxOpen(true);
   };
 
   const closeLightbox = () => {
     setLightboxOpen(false);
     setCurrentImgIndex(0);
+    setLightboxSrc('');
+    setSlideDirection(1);
+    setLightboxCursor(null);
   };
 
-  // Предыдущая / Следующая картинка
   const goPrev = () => {
     if (galleryImages.length === 0) return;
-    setCurrentImgIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+    setSlideDirection(-1);
+    const newIndex = (currentImgIndex - 1 + galleryImages.length) % galleryImages.length;
+    setCurrentImgIndex(newIndex);
+    setLightboxSrc(galleryImages[newIndex]);
   };
 
   const goNext = () => {
     if (galleryImages.length === 0) return;
-    setCurrentImgIndex((prev) => (prev + 1) % galleryImages.length);
+    setSlideDirection(1);
+    const newIndex = (currentImgIndex + 1) % galleryImages.length;
+    setCurrentImgIndex(newIndex);
+    setLightboxSrc(galleryImages[newIndex]);
   };
 
-  if (!project) {
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    if (window.innerWidth > MOBILE_BREAKPOINT || event.touches.length !== 1) return;
+
+    const touch = event.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+    didSwipe.current = false;
+  };
+
+  const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+
+    if (!start || window.innerWidth > MOBILE_BREAKPOINT || event.changedTouches.length === 0) return;
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+
+    didSwipe.current = true;
+    if (deltaX < 0) {
+      goNext();
+    } else {
+      goPrev();
+    }
+  };
+
+  const handleLightboxImageClick = () => {
+    if (didSwipe.current) {
+      didSwipe.current = false;
+      return;
+    }
+
+    closeLightbox();
+  };
+
+  const positionGlassCursor = (event: ReactMouseEvent<HTMLElement>) => {
+    if (window.innerWidth <= MOBILE_BREAKPOINT || !glassCursorRef.current) return;
+
+    glassCursorRef.current.style.transform =
+      `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
+  };
+
+  const showGlassCursor = (
+    action: LightboxCursorAction,
+    event: ReactMouseEvent<HTMLElement>,
+  ) => {
+    if (window.innerWidth <= MOBILE_BREAKPOINT) return;
+    setLightboxCursor(action);
+    positionGlassCursor(event);
+  };
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeLightbox();
+        return;
+      }
+
+      if (window.innerWidth <= MOBILE_BREAKPOINT) return;
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        goPrev();
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        goNext();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxOpen, currentImgIndex, galleryImages.length]);
+
+  if (status === 'failed') {
     return (
-      <div className={styles.notFound}>
-        <h2>Проект не найден</h2>
-        <Link to="/" className={styles.backLink}>← Вернуться к работам</Link>
+      <div className={styles.errorState}>
+        <p>{t('project.error')}</p>
+        <button onClick={() => dispatch(fetchProjects())} className={styles.retryBtn}>
+          {t('project.retry')}
+        </button>
       </div>
     );
   }
 
-  // Фильтруем галерею (убираем hero и cover, чтобы не было повторов)
-  const galleryImages = project.gallery.filter(
-    img => img !== project.hero && img !== project.cover
-  );
+  if (!project && status === 'succeeded') {
+    return (
+      <div className={styles.notFound}>
+        <h2>404</h2>
+        <Link to="/" className={styles.backLink}>← {t('notFound.back')}</Link>
+      </div>
+    );
+  }
+
+  if (!project) {
+    return <div className={styles.loading}>{t('project.loading')}</div>;
+  }
+
+  const projectKey = 'projectDetails.' + slug;
+
+  const getDescription = () => {
+    const projectCopy = project.translations?.[language];
+    if (projectCopy) return projectCopy.description;
+    const translated = t(projectKey + '.description');
+    if (translated.startsWith('projectDetails.')) return project.description || '';
+    return translated;
+  };
+
+  const getChallenge = () => {
+    const projectCopy = project.translations?.[language];
+    if (projectCopy) return projectCopy.challenge;
+    const translated = t(projectKey + '.challenge');
+    if (translated.startsWith('projectDetails.')) return project.challenge || '';
+    return translated;
+  };
+
+  const getSolution = () => {
+    const projectCopy = project.translations?.[language];
+    if (projectCopy) return projectCopy.solution;
+    const translated = t(projectKey + '.solution');
+    if (translated.startsWith('projectDetails.')) return project.solution || '';
+    return translated;
+  };
+
+  const getClient = () => {
+    const projectCopy = project.translations?.[language];
+    if (projectCopy) return projectCopy.client || 'N/A';
+    const translated = t(projectKey + '.client');
+    if (translated.startsWith('projectDetails.')) return project.client || 'N/A';
+    return translated;
+  };
+
+  const localizedDescription = getDescription();
+  const localizedChallenge = getChallenge();
+  const localizedSolution = getSolution();
 
   return (
     <div className={styles.detail}>
-      
-      {/* 1. Герой страницы */}
-      {project.hero ? (
-        <div className={styles.cover}>
-          <CloudinaryImage src={project.hero} alt={project.title} width={2000} />
-          <div className={styles.coverGradient}></div>
-          <div className={styles.coverInfo}>
-            <div className={styles.coverMeta}>
-              <span>{project.category}</span> / <span>{project.year}</span>
-            </div>
-            <h1 className={styles.title}>{project.title}</h1>
-            {project.description && <p className={styles.description}>{project.description}</p>}
-          </div>
+      <Seo
+        title={`${project.title} — ${language === 'ru' ? 'проект' : 'project'}`}
+        description={localizedDescription}
+        image={project.cover}
+      />
+      <div className={styles.headerInfo}>
+        <div className={styles.coverMeta}>
+          <span>{typography(project.category)}</span> / <span>{project.year}</span>
         </div>
-      ) : (
-        <div className={styles.textHero}>
-          <div className={styles.textHeroContent}>
-            <div className={styles.coverMeta}>
-              <span>{project.category}</span> / <span>{project.year}</span>
-            </div>
-            <h1 className={styles.title}>{project.title}</h1>
-            {project.description && <p className={styles.description}>{project.description}</p>}
-          </div>
-        </div>
-      )}
-
-      {/* 2. Метаданные */}
-      <div className={styles.metaBlock}>
-        <div className={styles.metaItem}>
-          <h3>Client</h3>
-          <p>{project.client || 'N/A'}</p>
-        </div>
-        <div className={styles.metaItem}>
-          <h3>Tools</h3>
-          <p>{project.tools || 'Figma, Illustrator'}</p>
-        </div>
+        <h1 className={styles.title}>{typography(project.title)}</h1>
+        <p className={styles.description}>
+          {typography(localizedDescription)}
+        </p>
       </div>
 
-      {/* 3. Процесс */}
-      {(project.challenge || project.solution) && (
-        <div className={styles.storyBlock}>
-          {project.challenge && (
-            <div className={styles.storyItem}>
-              <h3>Challenge</h3>
-              <p>{project.challenge}</p>
-            </div>
-          )}
-          {project.solution && (
-            <div className={styles.storyItem}>
-              <h3>Solution</h3>
-              <p>{project.solution}</p>
-            </div>
-          )}
+      <div className={styles.infoGrid}>
+        <div className={styles.infoItem}>
+          <h2>{t('project.client')}</h2>
+          <p>{getClient()}</p>
         </div>
-      )}
+        <div className={styles.infoItem}>
+          <h2>{t('project.tools')}</h2>
+          <p>{project.tools || 'Figma, Illustrator'}</p>
+        </div>
 
-      {/* 4. Галерея (шаг 2, без дублей) */}
+        {localizedChallenge && (
+          <div className={styles.infoItem}>
+            <h2>{t('project.challenge')}</h2>
+            <p>{typography(localizedChallenge)}</p>
+          </div>
+        )}
+        {localizedSolution && (
+          <div className={styles.infoItem}>
+            <h2>{t('project.solution')}</h2>
+            <p>{typography(localizedSolution)}</p>
+          </div>
+        )}
+      </div>
+
+      <div className={styles.heroImage}>
+        <CloudinaryImage src={project.hero || project.cover} alt={project.title} width={2000} sizes="100vw" />
+      </div>
+
       <div className={styles.gallery}>
         {galleryImages.length > 0 && (() => {
           const rows = [];
@@ -147,19 +296,41 @@ export default function ProjectDetail() {
             if (img2) {
               rows.push(
                 <div key={img1} className={styles.galleryItemHalf}>
-                  <div className={styles.clickableImage} onClick={() => openLightbox(i)}>
-                    <CloudinaryImage src={img1} alt={`${project.title} - ${i + 1}`} width={900} />
-                  </div>
-                  <div className={styles.clickableImage} onClick={() => openLightbox(i + 1)}>
-                    <CloudinaryImage src={img2} alt={`${project.title} - ${i + 2}`} width={900} />
-                  </div>
+                  <button
+                    type="button"
+                    className={styles.clickableImage}
+                    onClick={() => openLightbox(i)}
+                    aria-label={language === 'ru'
+                      ? `Открыть изображение ${i + 1} проекта ${project.title}`
+                      : `Open image ${i + 1} from ${project.title}`}
+                  >
+                    <CloudinaryImage src={img1} alt={`${project.title} - ${i + 1}`} width={900} sizes="(max-width: 768px) 100vw, 50vw" />
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.clickableImage}
+                    onClick={() => openLightbox(i + 1)}
+                    aria-label={language === 'ru'
+                      ? `Открыть изображение ${i + 2} проекта ${project.title}`
+                      : `Open image ${i + 2} from ${project.title}`}
+                  >
+                    <CloudinaryImage src={img2} alt={`${project.title} - ${i + 2}`} width={900} sizes="(max-width: 768px) 100vw, 50vw" />
+                  </button>
                 </div>
               );
             } else {
               rows.push(
-                <div key={img1} className={styles.galleryItemFull} onClick={() => openLightbox(i)}>
-                  <CloudinaryImage src={img1} alt={`${project.title} - ${i + 1}`} width={1600} />
-                </div>
+                <button
+                  key={img1}
+                  type="button"
+                  className={styles.galleryItemFull}
+                  onClick={() => openLightbox(i)}
+                  aria-label={language === 'ru'
+                    ? `Открыть изображение ${i + 1} проекта ${project.title}`
+                    : `Open image ${i + 1} from ${project.title}`}
+                >
+                  <CloudinaryImage src={img1} alt={`${project.title} - ${i + 1}`} width={1600} sizes="100vw" />
+                </button>
               );
             }
           }
@@ -167,50 +338,116 @@ export default function ProjectDetail() {
         })()}
       </div>
 
-      {/* 5. Следующий проект */}
       <div className={styles.nextProject}>
         <Link to={`/projects/${nextProject.slug}`}>
-          <span>Next Project</span>
-          <span>{nextProject.title} →</span>
+          <span className={styles.nextProjectLabel}>{t('project.next')}</span>
+          <span className={styles.nextProjectTitle}>{nextProject.title} →</span>
         </Link>
       </div>
 
-      {/* 6. Лайтбокс (со слайдером) */}
-      <AnimatePresence>
-        {lightboxOpen && galleryImages.length > 0 && (
-          <motion.div 
-            className={styles.lightbox}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {/* Кнопка закрытия */}
-            <button className={styles.closeBtn} onClick={closeLightbox}>✕</button>
-
-            {/* Левая зона слайдера */}
-            <div className={`${styles.navZone} ${styles.navLeft}`} onClick={goPrev}>
-              <span className={styles.navArrow}>‹</span>
-            </div>
-
-            {/* Правая зона слайдера */}
-            <div className={`${styles.navZone} ${styles.navRight}`} onClick={goNext}>
-              <span className={styles.navArrow}>›</span>
-            </div>
-
-            {/* Сама картинка (Клик по ней = закрытие) */}
-            <motion.div 
-              className={styles.lightboxContent}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={closeLightbox} // <-- КЛИК ПО ЦЕНТРУ ЗАКРЫВАЕТ
+      {createPortal(
+        <AnimatePresence>
+          {lightboxOpen && galleryImages.length > 0 && (
+            <motion.div
+              className={styles.lightbox}
+              role="dialog"
+              aria-modal="true"
+              aria-label={language === 'ru' ? 'Просмотр изображений проекта' : 'Project image viewer'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <CloudinaryImage src={galleryImages[currentImgIndex]} alt="Увеличенное изображение" width={2400} />
+              <button
+                type="button"
+                className={styles.closeBtn}
+                onClick={closeLightbox}
+                aria-label={language === 'ru' ? 'Закрыть просмотр изображений' : 'Close image viewer'}
+              >✕</button>
+              <button
+                type="button"
+                aria-label="Предыдущее изображение"
+                className={`${styles.navZone} ${styles.navLeft}`}
+                onClick={goPrev}
+                onMouseEnter={(event) => showGlassCursor('prev', event)}
+                onMouseMove={(event) => showGlassCursor('prev', event)}
+                onMouseLeave={() => setLightboxCursor(null)}
+              />
+              <button
+                type="button"
+                aria-label="Следующее изображение"
+                className={`${styles.navZone} ${styles.navRight}`}
+                onClick={goNext}
+                onMouseEnter={(event) => showGlassCursor('next', event)}
+                onMouseMove={(event) => showGlassCursor('next', event)}
+                onMouseLeave={() => setLightboxCursor(null)}
+              />
+              <motion.div
+                className={styles.lightboxContent}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={handleLightboxImageClick}
+                onMouseEnter={(event) => showGlassCursor('close', event)}
+                onMouseMove={(event) => showGlassCursor('close', event)}
+                onMouseLeave={() => setLightboxCursor(null)}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={() => {
+                  touchStart.current = null;
+                  didSwipe.current = false;
+                }}
+              >
+                <AnimatePresence initial={false} custom={slideDirection}>
+                  <motion.div
+                    key={currentImgIndex}
+                    className={styles.lightboxSlide}
+                    custom={slideDirection}
+                    variants={lightboxSlideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <CloudinaryImage
+                      src={lightboxSrc}
+                      alt="Увеличенное изображение"
+                      width={2400}
+                      sizes="100vw"
+                      loading="eager"
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </motion.div>
+              <div
+                ref={glassCursorRef}
+                className={`${styles.glassCursor} ${lightboxCursor ? styles.glassCursorVisible : ''}`}
+                aria-hidden="true"
+              >
+                <svg
+                  className={styles.glassCursorIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {lightboxCursor === 'prev' && <path d="M15 5 8 12l7 7" />}
+                  {lightboxCursor === 'next' && <path d="m9 5 7 7-7 7" />}
+                  {lightboxCursor === 'close' && (
+                    <>
+                      <path d="m6 6 12 12" />
+                      <path d="M18 6 6 18" />
+                    </>
+                  )}
+                </svg>
+              </div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 }

@@ -93,24 +93,55 @@
 .gridItem:hover img { transform: scale(1.05); }
 
 /* Затемнение + Текст при наведении */
+.projectLink {
+  --project-title-x: 50%;
+  --project-title-y: 50%;
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  background: rgba(0, 0, 0, 0.75);
+  display: block;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 150ms ease;
   color: #fff;
   text-align: center;
-  padding: 20px;
+  pointer-events: none;
 }
-.gridItem:hover .overlay { opacity: 1; }
+.gridItem:hover .overlay,
+.gridItem:focus-within .overlay { opacity: 1; }
 
-.title { font-size: 1.6rem; font-weight: 500; margin-bottom: 8px; }
-.category { font-size: 0.9rem; color: #ccc; text-transform: uppercase; letter-spacing: 0.05em; }
+.floatingProjectLabel {
+  position: absolute;
+  left: clamp(110px, var(--project-title-x), calc(100% - 110px));
+  top: clamp(48px, var(--project-title-y), calc(100% - 48px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: calc(100% - 40px);
+  padding: 10px 14px;
+  transform: translate(-50%, -50%);
+  transition: left 80ms linear, top 80ms linear;
+  will-change: left, top;
+}
+
+.title {
+  display: block;
+  max-width: 100%;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.category { display: block; font-size: 0.9rem; color: #ccc; text-transform: uppercase; letter-spacing: 0.05em; }
 
 /* Кнопка Load More */
 .loadMoreWrapper {
@@ -129,21 +160,30 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.loadMoreBtn:hover {
-  background: #fff;
-  color: #000;
-  border-color: #fff;
+.loadMoreBtn:hover,
+.loadMoreBtn:focus-visible,
+.loadMoreBtn:active {
+  background: #d00000;
+  color: #fff;
+  border-color: #d00000;
 }
 
-/* Адаптив для мобильных */
+/* --- МОБИЛЬНАЯ АДАПТАЦИЯ (с исправлениями) --- */
 @media (max-width: 768px) {
   .hero { padding: 0 24px; }
   .hero h1 { font-size: 3.5rem; }
   .servicesTags { font-size: 1.2rem; gap: 8px 16px; }
-  .hero::before { font-size: 40vw; right: -20%; }
+  
+  /* Скрываем фоновое слово на мобильных устройствах */
+  .hero::before {
+    display: none;
+  }
   
   .gallery { grid-template-columns: 1fr; gap: 20px; padding: 0 24px 60px; }
   .wide, .tall { grid-column: span 1; grid-row: span 1; aspect-ratio: auto; }
-  .overlay { opacity: 1; background: rgba(0,0,0,0.4); }
+  
+  /* Убираем оверлей на мобильных, чтобы картинки были чистыми */
+  .overlay { display: none; }
+  
   .title { font-size: 1.4rem; }
 }

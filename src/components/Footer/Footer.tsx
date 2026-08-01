@@ -1,10 +1,13 @@
+import { useTranslation } from '@/contexts/LanguageContext';
 import styles from './Footer.module.css';
 
 export const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className={styles.footer}>
       <p className={styles.text}>
-        РАЗРАБОТАНО ПОНОМАРЕВЫМ НИКОЛАЕМ ВЛАДИМИРОВИЧЕМ 2026
+        {t('footer.text')}
       </p>
     </footer>
   );

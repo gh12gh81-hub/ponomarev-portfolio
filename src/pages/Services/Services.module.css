@@ -7,6 +7,15 @@
 }
 .textHeroContent { max-width: 800px; }
 
+.eyebrow {
+  display: block;
+  margin-bottom: 24px;
+  color: #777;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
 .title { font-size: 5rem; font-weight: 300; letter-spacing: -0.02em; margin: 0 0 24px 0; line-height: 1.1; }
 .description { font-size: 1.25rem; line-height: 1.6; color: #e0e0e0; max-width: 600px; font-weight: 300; }
 
@@ -15,9 +24,191 @@
   display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
   padding: 100px 48px; max-width: 1400px; margin: 0 auto;
 }
-.storyItem h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; color: #777; margin-bottom: 16px; }
+.storyItem h2 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; color: #777; margin-bottom: 16px; }
 .storyItem p, .storyItem ul { font-size: 1.1rem; line-height: 1.8; color: #ccc; font-weight: 300; }
 .storyItem ul { list-style: none; padding: 0; margin: 0; }
+.storyItem li { display: flex; gap: 10px; }
+.storyItem li span { color: #d00000; }
+
+.processBlock,
+.selectedWork {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 120px 48px;
+  border-top: 1px solid #222;
+}
+
+.sectionHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.7fr);
+  gap: 80px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+
+.sectionHeader h2,
+.deliverablesBlock h2,
+.serviceCta h2 {
+  margin: 0;
+  font-size: clamp(2.3rem, 4.5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.sectionHeader p,
+.serviceCta p {
+  max-width: 520px;
+  margin: 0;
+  color: #999;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
+}
+
+.processStep {
+  padding-top: 24px;
+  border-top: 1px solid #333;
+}
+
+.stepNumber {
+  display: block;
+  margin-bottom: 44px;
+  color: #d00000;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+}
+
+.processStep h3 {
+  margin: 0 0 14px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.processStep p {
+  margin: 0;
+  color: #999;
+  line-height: 1.65;
+}
+
+.deliverablesBlock {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px 48px;
+  background: #080808;
+}
+
+.deliverablesList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #333;
+}
+
+.deliverablesList li {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #333;
+  color: #ddd;
+  font-size: 1.1rem;
+}
+
+.deliverablesList li span:last-child { color: #d00000; }
+
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.emptyProjects {
+  margin: 0;
+  color: #888;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.projectCard {
+  color: #fff;
+  text-decoration: none;
+}
+
+.projectImage {
+  aspect-ratio: 4 / 3;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: #111;
+}
+
+.projectImage img {
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.projectCard:hover .projectImage img,
+.projectCard:focus-visible .projectImage img {
+  transform: scale(1.04);
+  filter: brightness(0.76);
+}
+
+.projectCategory {
+  color: #777;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.projectCard h3 {
+  margin: 8px 0 0;
+  font-size: 1.45rem;
+  font-weight: 400;
+  transition: color 0.25s ease;
+}
+
+.projectCard:hover h3,
+.projectCard:focus-visible h3 { color: #d00000; }
+
+.serviceCta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 60px;
+  max-width: 1400px;
+  margin: 0 auto 100px;
+  padding: 100px 48px;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+}
+
+.serviceCta h2 { margin-bottom: 22px; }
+
+.ctaButton {
+  flex-shrink: 0;
+  padding: 16px 30px;
+  border: 1px solid #444;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.ctaButton:hover,
+.ctaButton:focus-visible {
+  border-color: #d00000;
+  background: #d00000;
+  color: #fff;
+}
 
 /* Главная страница со списком услуг (Сетка) */
 .servicesGrid {
@@ -28,14 +219,33 @@
   border: 1px solid #222; padding: 40px; transition: 0.3s;
   cursor: pointer; text-decoration: none; color: #fff; display: block;
 }
-.serviceCard:hover { border-color: #fff; transform: translateY(-4px); }
+.serviceCard:hover,
+.serviceCard:focus-visible { border-color: #d00000; transform: translateY(-4px); }
 .serviceCard h2 { font-size: 2.5rem; font-weight: 300; margin-bottom: 16px; }
 .serviceCard p { color: #999; line-height: 1.5; }
+.serviceCardWide { grid-column: span 2; }
 
 @media (max-width: 768px) {
   .textHero { padding: 0 24px; height: 50vh; }
   .title { font-size: 3rem; }
   .storyBlock { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
   .servicesGrid { grid-template-columns: 1fr; padding: 40px 24px 80px; }
+  .serviceCardWide { grid-column: span 1; }
   .serviceCard h2 { font-size: 2rem; }
+  .processBlock,
+  .selectedWork { padding: 80px 24px; }
+  .sectionHeader,
+  .deliverablesBlock { grid-template-columns: 1fr; gap: 32px; }
+  .sectionHeader { margin-bottom: 44px; }
+  .processGrid,
+  .projectGrid { grid-template-columns: 1fr; }
+  .processGrid { gap: 40px; }
+  .stepNumber { margin-bottom: 24px; }
+  .deliverablesBlock { padding: 72px 24px; }
+  .serviceCta {
+    margin-bottom: 72px;
+    padding: 72px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

@@ -12,7 +12,7 @@ const initialState: ProjectsState = {
   status: 'idle',
 }
 
-export const fetchProjects = createAsyncThunk(
+export const fetchProjects = createAsyncThunk<Project[]>(
   'projects/fetchProjects',
   async () => {
     return await getProjects()

@@ -79,3 +79,34 @@
   
   .value { font-size: 1.4rem; }
 }
+.cvWrapper {
+  margin-top: 60px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cvBtn {
+  display: inline-block;
+  padding: 14px 40px;
+  border: 1px solid #444;
+  color: #fff;
+  background: transparent;
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.cvBtn:hover,
+.cvBtn:focus-visible {
+  border-color: #d00000;
+  background: #d00000;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .cvWrapper {
+    justify-content: center;
+  }
+}
