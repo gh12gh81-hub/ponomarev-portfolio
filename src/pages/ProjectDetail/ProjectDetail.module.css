@@ -336,7 +336,7 @@
 .backLink:hover { border-bottom-color: #fff; }
 
 /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
-@media (max-width: 768px) {
+@media (max-width: 768px), (orientation: landscape) and (max-height: 600px) {
   .headerInfo { padding: 120px 24px 0 24px; }
   .title { font-size: 3rem; }
   .description { font-size: 1.1rem; max-width: 100%; }
@@ -430,4 +430,23 @@
     clip-path: inset(50%);
   }
   .navZone { display: none; }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .lightboxContent {
+    width: 100vw;
+    height: 100vh;
+  }
+  .lightboxVideo {
+    width: 100%;
+    height: 100vh;
+  }
+  .closeBtn {
+    top: calc(10px + env(safe-area-inset-top, 0px));
+    right: calc(10px + env(safe-area-inset-right, 0px));
+  }
+  .videoSoundBtn {
+    top: calc(10px + env(safe-area-inset-top, 0px));
+    left: calc(10px + env(safe-area-inset-left, 0px));
+  }
 }

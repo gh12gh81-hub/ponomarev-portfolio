@@ -15,12 +15,27 @@ import styles from './ProjectDetail.module.css';
 
 const MOBILE_BREAKPOINT = 768;
 const SWIPE_THRESHOLD = 50;
+const VIDEO_CONTROLS_MAX_HEIGHT = 72;
 type LightboxCursorAction = 'prev' | 'next' | 'close';
 const lightboxSlideVariants = {
   enter: (direction: number) => ({ x: direction > 0 ? '100%' : '-100%' }),
   center: { x: 0 },
   exit: (direction: number) => ({ x: direction > 0 ? '-100%' : '100%' }),
 };
+
+const supportsTouchNavigation = () => (
+  window.innerWidth <= 1024
+  && (
+    window.innerWidth <= MOBILE_BREAKPOINT
+    || window.matchMedia('(pointer: coarse)').matches
+    || navigator.maxTouchPoints > 0
+  )
+);
+
+const isVideoFullscreen = (video: HTMLVideoElement) => (
+  document.fullscreenElement === video
+  || Boolean((video as HTMLVideoElement & { webkitDisplayingFullscreen?: boolean }).webkitDisplayingFullscreen)
+);
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -103,18 +118,30 @@ export default function ProjectDetail() {
   };
 
   const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
-    if (window.innerWidth > MOBILE_BREAKPOINT || event.touches.length !== 1) return;
+    touchStart.current = null;
+    didSwipe.current = false;
+    if (!supportsTouchNavigation() || event.touches.length !== 1) return;
 
     const touch = event.touches[0];
+    const video = event.target instanceof HTMLVideoElement ? event.target : null;
+    if (video) {
+      if (isVideoFullscreen(video)) return;
+      const bounds = video.getBoundingClientRect();
+      const controlsHeight = Math.min(VIDEO_CONTROLS_MAX_HEIGHT, bounds.height * 0.25);
+      if (touch.clientY >= bounds.bottom - controlsHeight) return;
+    }
+
     touchStart.current = { x: touch.clientX, y: touch.clientY };
-    didSwipe.current = false;
   };
 
   const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
     const start = touchStart.current;
     touchStart.current = null;
 
-    if (!start || window.innerWidth > MOBILE_BREAKPOINT || event.changedTouches.length === 0) return;
+    if (!start || !supportsTouchNavigation() || event.changedTouches.length === 0) return;
+
+    const video = event.target instanceof HTMLVideoElement ? event.target : null;
+    if (video && isVideoFullscreen(video)) return;
 
     const touch = event.changedTouches[0];
     const deltaX = touch.clientX - start.x;
@@ -504,9 +531,6 @@ export default function ProjectDetail() {
                           event.stopPropagation();
                           setLightboxCursor(null);
                         }}
-                        onTouchStart={event => event.stopPropagation()}
-                        onTouchEnd={event => event.stopPropagation()}
-                        onTouchCancel={event => event.stopPropagation()}
                         onMutedChange={setLightboxMuted}
                       />
                     ) : (
