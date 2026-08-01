@@ -172,19 +172,54 @@
   right: 0;
   cursor: e-resize;
 }
+.navZoneVideo { width: 8%; }
 
 .lightboxContent { position: relative; width: 95vw; height: 85vh; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 5; }
 .lightboxSlide { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; }
 .lightboxSlide img { width: 100%; height: 100%; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,0.8); border-radius: 4px; pointer-events: none; }
 .lightboxVideo {
-  width: 100%;
-  height: 100%;
+  width: 80vw;
+  height: 85vh;
   object-fit: contain;
   border-radius: 4px;
   background: #000;
   box-shadow: 0 20px 60px rgba(0,0,0,0.8);
   cursor: auto;
   pointer-events: auto;
+}
+.videoSoundBtn {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  z-index: 10000;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  color: #d00000;
+  background:
+    radial-gradient(circle at 25% 12%, rgba(255, 255, 255, 0.34), transparent 38%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(208, 0, 0, 0.12));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(208, 0, 0, 0.1);
+  backdrop-filter: blur(16px) saturate(165%);
+  -webkit-backdrop-filter: blur(16px) saturate(165%);
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+.videoSoundBtn svg { width: 21px; height: 21px; }
+.videoSoundBtn:hover,
+.videoSoundBtn:focus-visible {
+  border-color: rgba(208, 0, 0, 0.85);
+  background-color: rgba(208, 0, 0, 0.12);
 }
 .closeBtn { display: none; position: absolute; top: 40px; right: 40px; background: transparent; border: none; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 10000; transition: 0.3s; }
 .closeBtn:hover,
@@ -371,6 +406,28 @@
     width: 98vw;
     height: 70vh;
     touch-action: pan-y;
+  }
+  .lightboxVideo {
+    width: 100%;
+    height: 70vh;
+  }
+  .videoSoundBtn {
+    top: calc(20px + env(safe-area-inset-top, 0px));
+    left: 16px;
+    min-width: 52px;
+    width: 52px;
+    height: 52px;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    transform: none;
+  }
+  .videoSoundBtn span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
   .navZone { display: none; }
 }

@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, type MouseEvent } from 'react'
+import { memo, useEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react'
 import { getCloudinaryUrl } from '@/components/CloudinaryImage/CloudinaryImage'
 
 interface Props {
@@ -15,6 +15,10 @@ interface Props {
   onClick?: (event: MouseEvent<HTMLVideoElement>) => void
   onMouseEnter?: (event: MouseEvent<HTMLVideoElement>) => void
   onMouseMove?: (event: MouseEvent<HTMLVideoElement>) => void
+  onTouchStart?: (event: TouchEvent<HTMLVideoElement>) => void
+  onTouchEnd?: (event: TouchEvent<HTMLVideoElement>) => void
+  onTouchCancel?: (event: TouchEvent<HTMLVideoElement>) => void
+  onMutedChange?: (muted: boolean) => void
 }
 
 const isRemoteUrl = (value: string) => /^https?:\/\//i.test(value)
@@ -39,15 +43,20 @@ export const CloudinaryVideo = memo(({
   autoPlay = false,
   controls = false,
   loop = false,
-  muted = false,
+  muted,
   preload = 'metadata',
   ariaLabel,
   onClick,
   onMouseEnter,
   onMouseMove,
+  onTouchStart,
+  onTouchEnd,
+  onTouchCancel,
+  onMutedChange,
 }: Props) => {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [isMuted, setIsMuted] = useState(muted ?? autoPlay)
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -60,6 +69,10 @@ export const CloudinaryVideo = memo(({
   useEffect(() => {
     if (reduceMotion) videoRef.current?.pause()
   }, [reduceMotion])
+
+  useEffect(() => {
+    setIsMuted(muted ?? autoPlay)
+  }, [src, muted, autoPlay])
 
   const shouldAutoPlay = autoPlay && !reduceMotion
   const resolvedPoster = poster
@@ -75,13 +88,21 @@ export const CloudinaryVideo = memo(({
       autoPlay={shouldAutoPlay}
       controls={controls}
       loop={loop}
-      muted={muted || shouldAutoPlay}
+      muted={isMuted}
       playsInline
       preload={preload}
       aria-label={ariaLabel}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseMove={onMouseMove}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onTouchCancel={onTouchCancel}
+      onVolumeChange={event => {
+        const nextMuted = event.currentTarget.muted
+        setIsMuted(nextMuted)
+        onMutedChange?.(nextMuted)
+      }}
     />
   )
 })

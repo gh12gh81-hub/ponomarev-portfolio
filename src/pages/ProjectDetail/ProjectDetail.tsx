@@ -38,6 +38,7 @@ export default function ProjectDetail() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
+  const [lightboxMuted, setLightboxMuted] = useState(true);
   const [lightboxCursor, setLightboxCursor] = useState<LightboxCursorAction | null>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const didSwipe = useRef(false);
@@ -73,6 +74,7 @@ export default function ProjectDetail() {
   const openLightbox = (index: number) => {
     setSlideDirection(1);
     setCurrentImgIndex(index);
+    setLightboxMuted(true);
     setLightboxOpen(true);
   };
 
@@ -80,12 +82,14 @@ export default function ProjectDetail() {
     setLightboxOpen(false);
     setCurrentImgIndex(0);
     setSlideDirection(1);
+    setLightboxMuted(true);
     setLightboxCursor(null);
   };
 
   const goPrev = () => {
     if (galleryMedia.length === 0) return;
     setSlideDirection(-1);
+    setLightboxMuted(true);
     const newIndex = (currentImgIndex - 1 + galleryMedia.length) % galleryMedia.length;
     setCurrentImgIndex(newIndex);
   };
@@ -93,6 +97,7 @@ export default function ProjectDetail() {
   const goNext = () => {
     if (galleryMedia.length === 0) return;
     setSlideDirection(1);
+    setLightboxMuted(true);
     const newIndex = (currentImgIndex + 1) % galleryMedia.length;
     setCurrentImgIndex(newIndex);
   };
@@ -398,10 +403,37 @@ export default function ProjectDetail() {
                   <path d="M18 6 6 18" />
                 </svg>
               </button>
+              {lightboxMedia.type === 'video' && (
+                <button
+                  type="button"
+                  className={styles.videoSoundBtn}
+                  onClick={() => setLightboxMuted(current => !current)}
+                  aria-label={language === 'ru'
+                    ? (lightboxMuted ? 'Включить звук видео' : 'Выключить звук видео')
+                    : (lightboxMuted ? 'Unmute video' : 'Mute video')}
+                  aria-pressed={!lightboxMuted}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M11 5 6.5 9H3v6h3.5l4.5 4V5Z" />
+                    {lightboxMuted ? (
+                      <>
+                        <path d="m16 9 5 6" />
+                        <path d="m21 9-5 6" />
+                      </>
+                    ) : (
+                      <>
+                        <path d="M15.5 9.5a4 4 0 0 1 0 5" />
+                        <path d="M18 7a7 7 0 0 1 0 10" />
+                      </>
+                    )}
+                  </svg>
+                  <span>{language === 'ru' ? (lightboxMuted ? 'Звук' : 'Звук включён') : (lightboxMuted ? 'Sound' : 'Sound on')}</span>
+                </button>
+              )}
               <button
                 type="button"
                 aria-label={language === 'ru' ? 'Предыдущий медиафайл' : 'Previous media'}
-                className={`${styles.navZone} ${styles.navLeft}`}
+                className={`${styles.navZone} ${styles.navLeft} ${lightboxMedia.type === 'video' ? styles.navZoneVideo : ''}`}
                 onClick={goPrev}
                 onMouseEnter={(event) => showGlassCursor('prev', event)}
                 onMouseMove={(event) => showGlassCursor('prev', event)}
@@ -410,7 +442,7 @@ export default function ProjectDetail() {
               <button
                 type="button"
                 aria-label={language === 'ru' ? 'Следующий медиафайл' : 'Next media'}
-                className={`${styles.navZone} ${styles.navRight}`}
+                className={`${styles.navZone} ${styles.navRight} ${lightboxMedia.type === 'video' ? styles.navZoneVideo : ''}`}
                 onClick={goNext}
                 onMouseEnter={(event) => showGlassCursor('next', event)}
                 onMouseMove={(event) => showGlassCursor('next', event)}
@@ -453,6 +485,7 @@ export default function ProjectDetail() {
                         autoPlay
                         controls
                         loop
+                        muted={lightboxMuted}
                         preload="auto"
                         ariaLabel={language === 'ru' ? `Видео проекта ${project.title}` : `${project.title} project video`}
                         onClick={event => event.stopPropagation()}
@@ -464,6 +497,10 @@ export default function ProjectDetail() {
                           event.stopPropagation();
                           setLightboxCursor(null);
                         }}
+                        onTouchStart={event => event.stopPropagation()}
+                        onTouchEnd={event => event.stopPropagation()}
+                        onTouchCancel={event => event.stopPropagation()}
+                        onMutedChange={setLightboxMuted}
                       />
                     ) : (
                       <CloudinaryImage
