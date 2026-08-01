@@ -386,12 +386,25 @@
 }
 
 .checkboxDropdown summary::-webkit-details-marker { display: none; }
-.checkboxDropdown summary > span:first-child {
+.dropdownSummaryValue {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dropdownSummaryValue > span:last-child {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.dropdownSummaryIcons {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+.dropdownSummaryIcons .toolIcon + .toolIcon { margin-left: -5px; }
 .checkboxDropdown summary:hover,
 .checkboxDropdown summary:focus-visible,
 .checkboxDropdown[open] summary { border-color: #d00000; background: #171717; }
@@ -435,6 +448,35 @@
 }
 .checkboxDropdownPanel label:hover { background: #1b1b1b; color: #fff; }
 .checkboxDropdownPanel .dropdownOptionChecked { color: #fff; }
+
+.dropdownOptionContent {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toolIcon {
+  flex: 0 0 auto;
+  width: 25px;
+  height: 25px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid;
+  border-radius: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 3px 10px rgba(0, 0, 0, 0.24);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.dropdownSummaryIcons .toolIcon {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  font-size: 0.58rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+}
 
 .checkboxDropdownPanel input {
   width: 18px;

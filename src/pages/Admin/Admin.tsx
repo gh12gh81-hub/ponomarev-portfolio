@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
 import { getCloudinaryUrl } from '@/components/CloudinaryImage/CloudinaryImage'
 import { Seo } from '@/components/Seo/Seo'
 import { getTranslationForLanguage, type Language } from '@/contexts/LanguageContext'
@@ -45,6 +45,16 @@ const toolOptions = [
   'Frontend Development',
 ]
 
+const toolIcons: Record<string, { glyph: string; color: string; background: string; border: string }> = {
+  Illustrator: { glyph: 'Ai', color: '#ff9a00', background: '#2b1200', border: '#6e3600' },
+  Photoshop: { glyph: 'Ps', color: '#31a8ff', background: '#001e36', border: '#075d8d' },
+  Figma: { glyph: 'Fg', color: '#ffffff', background: 'linear-gradient(145deg, #f24e1e, #a259ff)', border: '#b36dde' },
+  InDesign: { glyph: 'Id', color: '#ff5c96', background: '#310018', border: '#8a1743' },
+  CorelDRAW: { glyph: 'Cd', color: '#72e38b', background: '#0d2b15', border: '#276c37' },
+  'After Effects': { glyph: 'Ae', color: '#b7a7ff', background: '#21124a', border: '#6049ad' },
+  'Frontend Development': { glyph: '</>', color: '#63ddff', background: '#102830', border: '#267085' },
+}
+
 const splitSelection = (value: string) => [...new Set(
   value.split(',').map(item => item.trim()).filter(Boolean),
 )]
@@ -54,9 +64,10 @@ interface CheckboxDropdownProps {
   options: string[]
   value: string
   onChange: (value: string) => void
+  icons?: Record<string, { glyph: string; color: string; background: string; border: string }>
 }
 
-function CheckboxDropdown({ label, options, value, onChange }: CheckboxDropdownProps) {
+function CheckboxDropdown({ label, options, value, onChange, icons }: CheckboxDropdownProps) {
   const selected = splitSelection(value)
   const legacyOptions = selected.filter(item => !options.includes(item))
   const visibleOptions = [...options, ...legacyOptions]
@@ -77,13 +88,30 @@ function CheckboxDropdown({ label, options, value, onChange }: CheckboxDropdownP
       <span className={styles.multiSelectLabel}>{label}</span>
       <details className={styles.checkboxDropdown}>
         <summary>
-          <span>{selected.length > 0 ? selected.join(', ') : 'Выберите из списка'}</span>
+          <span className={styles.dropdownSummaryValue}>
+            {icons && selected.length > 0 && (
+              <span className={styles.dropdownSummaryIcons} aria-hidden="true">
+                {selected.slice(0, 4).map(option => {
+                  const icon = icons[option]
+                  return icon ? (
+                    <span
+                      key={option}
+                      className={styles.toolIcon}
+                      style={{ color: icon.color, background: icon.background, borderColor: icon.border } as CSSProperties}
+                    >{icon.glyph}</span>
+                  ) : null
+                })}
+              </span>
+            )}
+            <span>{selected.length > 0 ? selected.join(', ') : 'Выберите из списка'}</span>
+          </span>
           <span className={styles.dropdownChevron} aria-hidden="true">⌄</span>
         </summary>
         <div className={styles.checkboxDropdownPanel} role="group" aria-label={label}>
           {visibleOptions.map(option => {
             const checked = selected.includes(option)
             const legacy = legacyOptions.includes(option)
+            const icon = icons?.[option]
             return (
               <label key={option} className={checked ? styles.dropdownOptionChecked : ''}>
                 <input
@@ -92,7 +120,16 @@ function CheckboxDropdown({ label, options, value, onChange }: CheckboxDropdownP
                   onChange={() => toggleOption(option)}
                   aria-label={`${label}: ${option}`}
                 />
-                <span>{option}{legacy ? ' — текущее значение' : ''}</span>
+                <span className={styles.dropdownOptionContent}>
+                  {icon && (
+                    <span
+                      className={styles.toolIcon}
+                      style={{ color: icon.color, background: icon.background, borderColor: icon.border } as CSSProperties}
+                      aria-hidden="true"
+                    >{icon.glyph}</span>
+                  )}
+                  <span>{option}{legacy ? ' — текущее значение' : ''}</span>
+                </span>
               </label>
             )
           })}
@@ -523,6 +560,7 @@ export default function Admin() {
                   <CheckboxDropdown
                     label="Инструменты"
                     options={toolOptions}
+                    icons={toolIcons}
                     value={selectedProject.tools || ''}
                     onChange={tools => updateSelected(project => ({ ...project, tools }))}
                   />
