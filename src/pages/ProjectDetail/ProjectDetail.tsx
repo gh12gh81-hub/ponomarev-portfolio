@@ -420,7 +420,7 @@ export default function ProjectDetail() {
             >
               <button
                 type="button"
-                className={styles.closeBtn}
+                className={`${styles.closeBtn} ${lightboxMedia.type === 'video' ? styles.closeBtnVideo : ''}`}
                 onClick={closeLightbox}
                 aria-label={language === 'ru' ? 'Закрыть просмотр медиафайлов' : 'Close media viewer'}
               >
