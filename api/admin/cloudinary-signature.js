@@ -30,6 +30,7 @@ export default async function handler(req, res) {
 
   try {
     const body = await readJsonBody(req, 20_000)
+    const resourceType = body.resourceType === 'video' ? 'video' : 'image'
     const timestamp = Math.floor(Date.now() / 1000)
     const folder = `portfolio/projects/${safeFolderPart(body.slug)}`
     const parameters = {
@@ -55,7 +56,8 @@ export default async function handler(req, res) {
       timestamp,
       uniqueFilename: true,
       useFilename: true,
-      uploadUrl: `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/image/upload`,
+      resourceType,
+      uploadUrl: `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudName)}/${resourceType}/upload`,
     })
   } catch {
     return sendJson(res, 400, { error: 'Не удалось подготовить загрузку.' })

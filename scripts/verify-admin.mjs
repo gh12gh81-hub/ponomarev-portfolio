@@ -68,11 +68,26 @@ await cloudinarySignatureHandler(request('POST', { slug: 'Test Project' }, cooki
 const signaturePayload = JSON.parse(signatureResponse.payload)
 assert(signatureResponse.statusCode === 200, 'Cloudinary signature endpoint failed')
 assert(signaturePayload.folder === 'portfolio/projects/test-project', 'Cloudinary folder sanitizing failed')
+assert(signaturePayload.resourceType === 'image', 'Default Cloudinary resource type is invalid')
+assert(signaturePayload.uploadUrl.endsWith('/image/upload'), 'Image upload URL is invalid')
 assert(!JSON.stringify(signaturePayload).includes(process.env.CLOUDINARY_API_SECRET), 'Cloudinary secret leaked')
+
+const videoSignatureResponse = response()
+await cloudinarySignatureHandler(request('POST', { slug: 'Test Project', resourceType: 'video' }, cookie), videoSignatureResponse)
+const videoSignaturePayload = JSON.parse(videoSignatureResponse.payload)
+assert(videoSignatureResponse.statusCode === 200, 'Cloudinary video signature endpoint failed')
+assert(videoSignaturePayload.resourceType === 'video', 'Cloudinary video resource type is invalid')
+assert(videoSignaturePayload.uploadUrl.endsWith('/video/upload'), 'Video upload URL is invalid')
 
 const currentProjects = JSON.parse(await fs.readFile('public/data/projects.json', 'utf8'))
 const validated = validateProjects(currentProjects)
 assert(validated.projects.length === currentProjects.length, 'Project validation changed project count')
+
+const projectsWithVideo = structuredClone(currentProjects)
+projectsWithVideo[0].gallery.push({ type: 'video', src: 'portfolio/projects/test/demo', poster: 'portfolio/projects/test/poster' })
+const validatedWithVideo = validateProjects(projectsWithVideo)
+const validatedVideo = validatedWithVideo.projects[0].gallery.at(-1)
+assert(validatedVideo.type === 'video' && validatedVideo.src.endsWith('/demo'), 'Video gallery validation failed')
 
 let invalidRejected = false
 try {

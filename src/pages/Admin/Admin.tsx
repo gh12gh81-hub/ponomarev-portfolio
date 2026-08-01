@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type CSSProperties, type FormEvent } from 'react'
 import { getCloudinaryUrl } from '@/components/CloudinaryImage/CloudinaryImage'
+import { CloudinaryVideo } from '@/components/CloudinaryVideo/CloudinaryVideo'
 import { Seo } from '@/components/Seo/Seo'
 import { getTranslationForLanguage, type Language } from '@/contexts/LanguageContext'
 import {
@@ -8,15 +9,17 @@ import {
   loginAdmin,
   logoutAdmin,
   saveAdminProjects,
-  uploadAdminImage,
+  uploadAdminMedia,
   type AdminSession,
 } from '@/api/admin'
 import {
   serviceCategories,
   type Project,
+  type ProjectMediaItem,
   type ProjectTranslation,
   type ServiceCategory,
 } from '@/types'
+import { createProjectMedia, normalizeProjectMedia } from '@/utils/projectMedia'
 import styles from './Admin.module.css'
 
 const serviceLabels: Record<ServiceCategory, string> = {
@@ -163,6 +166,7 @@ const hydrateProject = (project: Project): Project => ({
   services: project.services || [],
   hero: project.hero || project.cover,
   banner: project.banner || '',
+  gallery: project.gallery || [],
   translations: {
     ru: {
       client: project.translations?.ru.client ?? getLegacyTranslation(project, 'ru', 'client'),
@@ -216,11 +220,12 @@ interface UploadControlProps {
   id: string
   label: string
   multiple?: boolean
+  accept?: string
   disabled: boolean
   onFiles: (files: File[]) => void
 }
 
-function UploadControl({ id, label, multiple = false, disabled, onFiles }: UploadControlProps) {
+function UploadControl({ id, label, multiple = false, accept = 'image/*', disabled, onFiles }: UploadControlProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
     event.target.value = ''
@@ -233,7 +238,7 @@ function UploadControl({ id, label, multiple = false, disabled, onFiles }: Uploa
       <input
         id={id}
         type="file"
-        accept="image/*"
+        accept={accept}
         multiple={multiple}
         disabled={disabled}
         onChange={handleChange}
@@ -401,28 +406,54 @@ export default function Admin() {
     setError('')
     setNotice('')
     try {
+      if (target !== 'gallery' && files.some(file => !file.type.startsWith('image/'))) {
+        throw new Error('Для обложки и hero можно использовать только изображения.')
+      }
       const uploaded = []
-      for (const file of files) uploaded.push(await uploadAdminImage(file, selectedProject.slug))
-      const publicIds = uploaded.map(asset => asset.publicId)
+      for (const file of files) uploaded.push(await uploadAdminMedia(file, selectedProject.slug))
       updateSelected(project => target === 'gallery'
-        ? { ...project, gallery: [...project.gallery, ...publicIds] }
-        : { ...project, [target]: publicIds[0] })
-      setNotice(`${files.length === 1 ? 'Изображение загружено' : `Загружено изображений: ${files.length}`}. Нажмите «Сохранить изменения».`)
+        ? {
+            ...project,
+            gallery: [
+              ...project.gallery,
+              ...uploaded.map(asset => createProjectMedia(asset.type, asset.publicId)),
+            ],
+          }
+        : { ...project, [target]: uploaded[0].publicId })
+      const videosCount = uploaded.filter(asset => asset.type === 'video').length
+      const imagesCount = uploaded.length - videosCount
+      const summary = [
+        imagesCount > 0 ? `изображений: ${imagesCount}` : '',
+        videosCount > 0 ? `видео: ${videosCount}` : '',
+      ].filter(Boolean).join(', ')
+      setNotice(`Загружено ${summary}. Нажмите «Сохранить изменения».`)
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : 'Не удалось загрузить изображение.')
+      setError(reason instanceof Error ? reason.message : 'Не удалось загрузить медиафайл.')
     } finally {
       setUploading('')
     }
   }
 
-  const moveGalleryImage = (from: number, to: number) => {
+  const moveGalleryItem = (from: number, to: number) => {
     if (!selectedProject || from === to || from < 0 || to < 0 || to >= selectedProject.gallery.length) return
     updateSelected(project => {
       const gallery = [...project.gallery]
-      const [image] = gallery.splice(from, 1)
-      gallery.splice(to, 0, image)
+      const [item] = gallery.splice(from, 1)
+      gallery.splice(to, 0, item)
       return { ...project, gallery }
     })
+  }
+
+  const updateGalleryItem = (index: number, patch: Partial<ProjectMediaItem>) => {
+    updateSelected(project => ({
+      ...project,
+      gallery: project.gallery.map((item, itemIndex) => {
+        if (itemIndex !== index) return item
+        const current = normalizeProjectMedia(item)
+        const next = { ...current, ...patch }
+        return createProjectMedia(next.type, next.src, next.poster)
+      }),
+    }))
   }
 
   if (loading && !session?.authenticated) {
@@ -660,39 +691,67 @@ export default function Admin() {
                   <h2>Галерея</h2>
                   <UploadControl
                     id="gallery-upload"
-                    label={uploading === 'gallery' ? 'Загрузка…' : '+ Добавить изображения'}
+                    label={uploading === 'gallery' ? 'Загрузка…' : '+ Добавить фото или видео'}
                     multiple
+                    accept="image/*,video/mp4,video/webm,video/quicktime"
                     disabled={Boolean(uploading)}
                     onFiles={files => handleUpload('gallery', files)}
                   />
                 </div>
-                <p className={styles.helperText}>Перетаскивайте карточки или используйте стрелки. Загруженные файлы появятся на сайте после сохранения проекта.</p>
+                <p className={styles.helperText}>Фото — до 25 МБ, видео MP4, WebM или MOV — до 100 МБ. Перетаскивайте карточки или используйте стрелки. Файлы появятся на сайте после сохранения проекта.</p>
                 <div className={styles.galleryGrid}>
-                  {selectedProject.gallery.map((image, index) => (
+                  {selectedProject.gallery.map((item, index) => {
+                    const media = normalizeProjectMedia(item)
+                    return (
                     <article
                       className={styles.galleryCard}
-                      key={`${image}-${index}`}
+                      key={`${selectedProject.id}-gallery-${index}`}
                       draggable
                       onDragStart={() => setDraggedGalleryIndex(index)}
                       onDragOver={event => event.preventDefault()}
                       onDrop={() => {
-                        if (draggedGalleryIndex !== null) moveGalleryImage(draggedGalleryIndex, index)
+                        if (draggedGalleryIndex !== null) moveGalleryItem(draggedGalleryIndex, index)
                         setDraggedGalleryIndex(null)
                       }}
                     >
-                      <div className={styles.galleryImage}><img src={assetUrl(image)} alt="" /></div>
+                      <div className={styles.galleryImage}>
+                        {media.type === 'video' ? (
+                          <CloudinaryVideo src={media.src} poster={media.poster} controls muted preload="metadata" ariaLabel={`Предпросмотр видео ${index + 1}`} />
+                        ) : (
+                          <img src={assetUrl(media.src)} alt="" />
+                        )}
+                        <span className={styles.mediaTypeBadge}>{media.type === 'video' ? 'VIDEO' : 'IMAGE'}</span>
+                      </div>
                       <div className={styles.galleryMeta}>
                         <span>{String(index + 1).padStart(2, '0')}</span>
                         <div>
-                          <button type="button" onClick={() => moveGalleryImage(index, index - 1)} aria-label="Переместить изображение влево">←</button>
-                          <button type="button" onClick={() => moveGalleryImage(index, index + 1)} aria-label="Переместить изображение вправо">→</button>
+                          <button type="button" onClick={() => moveGalleryItem(index, index - 1)} aria-label="Переместить медиафайл влево">←</button>
+                          <button type="button" onClick={() => moveGalleryItem(index, index + 1)} aria-label="Переместить медиафайл вправо">→</button>
                           <button type="button" className={styles.removeImage} onClick={() => updateSelected(project => ({ ...project, gallery: project.gallery.filter((_, itemIndex) => itemIndex !== index) }))}>Удалить</button>
                         </div>
                       </div>
-                      <input aria-label={`Cloudinary public ID изображения ${index + 1}`} value={image} onChange={event => updateSelected(project => ({ ...project, gallery: project.gallery.map((item, itemIndex) => itemIndex === index ? event.target.value : item) }))} />
+                      <div className={styles.galleryFields}>
+                        <label>
+                          <span>Тип</span>
+                          <select value={media.type} onChange={event => updateGalleryItem(index, { type: event.target.value === 'video' ? 'video' : 'image' })}>
+                            <option value="image">Изображение</option>
+                            <option value="video">Видео</option>
+                          </select>
+                        </label>
+                        <label>
+                          <span>Cloudinary public ID</span>
+                          <input aria-label={`Cloudinary public ID медиафайла ${index + 1}`} value={media.src} onChange={event => updateGalleryItem(index, { src: event.target.value })} />
+                        </label>
+                        {media.type === 'video' && (
+                          <label>
+                            <span>Poster public ID — необязательно</span>
+                            <input aria-label={`Cloudinary public ID постера ${index + 1}`} value={media.poster || ''} onChange={event => updateGalleryItem(index, { poster: event.target.value })} placeholder="По умолчанию — первый кадр" />
+                          </label>
+                        )}
+                      </div>
                     </article>
-                  ))}
-                  {selectedProject.gallery.length === 0 && <div className={styles.galleryEmpty}>Добавьте первое изображение галереи.</div>}
+                  )})}
+                  {selectedProject.gallery.length === 0 && <div className={styles.galleryEmpty}>Добавьте первое изображение или видео.</div>}
                 </div>
               </div>
 

@@ -4,11 +4,13 @@ import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CloudinaryImage } from '@/components/CloudinaryImage/CloudinaryImage';
+import { CloudinaryVideo } from '@/components/CloudinaryVideo/CloudinaryVideo';
 import { Seo } from '@/components/Seo/Seo';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { typography } from '@/utils/typography';
 import { fetchProjects } from '@/features/projectsSlice';
 import { AppDispatch, RootState } from '@/store';
+import { normalizeProjectMedia } from '@/utils/projectMedia';
 import styles from './ProjectDetail.module.css';
 
 const MOBILE_BREAKPOINT = 768;
@@ -29,13 +31,12 @@ export default function ProjectDetail() {
   const project = projects.find(p => p.slug === slug);
   const currentIndex = projects.findIndex(p => p.slug === slug);
   const nextProject = projects[(currentIndex + 1) % projects.length];
-  const galleryImages = project?.gallery.filter(
-    img => img !== project.hero && img !== project.cover
-  ) ?? [];
+  const galleryMedia = project?.gallery
+    .map(normalizeProjectMedia)
+    .filter(media => media.src !== project.hero && media.src !== project.cover) ?? [];
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
-  const [lightboxSrc, setLightboxSrc] = useState('');
   const [slideDirection, setSlideDirection] = useState(1);
   const [lightboxCursor, setLightboxCursor] = useState<LightboxCursorAction | null>(null);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -72,32 +73,28 @@ export default function ProjectDetail() {
   const openLightbox = (index: number) => {
     setSlideDirection(1);
     setCurrentImgIndex(index);
-    setLightboxSrc(galleryImages[index]);
     setLightboxOpen(true);
   };
 
   const closeLightbox = () => {
     setLightboxOpen(false);
     setCurrentImgIndex(0);
-    setLightboxSrc('');
     setSlideDirection(1);
     setLightboxCursor(null);
   };
 
   const goPrev = () => {
-    if (galleryImages.length === 0) return;
+    if (galleryMedia.length === 0) return;
     setSlideDirection(-1);
-    const newIndex = (currentImgIndex - 1 + galleryImages.length) % galleryImages.length;
+    const newIndex = (currentImgIndex - 1 + galleryMedia.length) % galleryMedia.length;
     setCurrentImgIndex(newIndex);
-    setLightboxSrc(galleryImages[newIndex]);
   };
 
   const goNext = () => {
-    if (galleryImages.length === 0) return;
+    if (galleryMedia.length === 0) return;
     setSlideDirection(1);
-    const newIndex = (currentImgIndex + 1) % galleryImages.length;
+    const newIndex = (currentImgIndex + 1) % galleryMedia.length;
     setCurrentImgIndex(newIndex);
-    setLightboxSrc(galleryImages[newIndex]);
   };
 
   const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
@@ -177,7 +174,7 @@ export default function ProjectDetail() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen, currentImgIndex, galleryImages.length]);
+  }, [lightboxOpen, currentImgIndex, galleryMedia.length]);
 
   if (status === 'failed') {
     return (
@@ -240,6 +237,37 @@ export default function ProjectDetail() {
   const localizedDescription = getDescription();
   const localizedChallenge = getChallenge();
   const localizedSolution = getSolution();
+  const lightboxMedia = galleryMedia[currentImgIndex];
+
+  const mediaLabel = (index: number) => language === 'ru'
+    ? `Открыть медиафайл ${index + 1} проекта ${project.title}`
+    : `Open media ${index + 1} from ${project.title}`;
+
+  const renderGalleryMedia = (index: number, width: number, sizes: string) => {
+    const media = galleryMedia[index];
+    if (media.type === 'video') {
+      return (
+        <CloudinaryVideo
+          src={media.src}
+          poster={media.poster}
+          width={width}
+          autoPlay
+          loop
+          muted
+          preload="metadata"
+          ariaLabel={`${project.title} - ${index + 1}`}
+        />
+      );
+    }
+    return (
+      <CloudinaryImage
+        src={media.src}
+        alt={`${project.title} - ${index + 1}`}
+        width={width}
+        sizes={sizes}
+      />
+    );
+  };
 
   return (
     <div className={styles.detail}>
@@ -287,49 +315,43 @@ export default function ProjectDetail() {
       </div>
 
       <div className={styles.gallery}>
-        {galleryImages.length > 0 && (() => {
+        {galleryMedia.length > 0 && (() => {
           const rows = [];
-          for (let i = 0; i < galleryImages.length; i += 2) {
-            const img1 = galleryImages[i];
-            const img2 = galleryImages[i + 1];
+          for (let i = 0; i < galleryMedia.length; i += 2) {
+            const media1 = galleryMedia[i];
+            const media2 = galleryMedia[i + 1];
 
-            if (img2) {
+            if (media2) {
               rows.push(
-                <div key={img1} className={styles.galleryItemHalf}>
+                <div key={`${media1.type}-${media1.src}-${i}`} className={styles.galleryItemHalf}>
                   <button
                     type="button"
                     className={styles.clickableImage}
                     onClick={() => openLightbox(i)}
-                    aria-label={language === 'ru'
-                      ? `Открыть изображение ${i + 1} проекта ${project.title}`
-                      : `Open image ${i + 1} from ${project.title}`}
+                    aria-label={mediaLabel(i)}
                   >
-                    <CloudinaryImage src={img1} alt={`${project.title} - ${i + 1}`} width={900} sizes="(max-width: 768px) 100vw, 50vw" />
+                    {renderGalleryMedia(i, 900, '(max-width: 768px) 100vw, 50vw')}
                   </button>
                   <button
                     type="button"
                     className={styles.clickableImage}
                     onClick={() => openLightbox(i + 1)}
-                    aria-label={language === 'ru'
-                      ? `Открыть изображение ${i + 2} проекта ${project.title}`
-                      : `Open image ${i + 2} from ${project.title}`}
+                    aria-label={mediaLabel(i + 1)}
                   >
-                    <CloudinaryImage src={img2} alt={`${project.title} - ${i + 2}`} width={900} sizes="(max-width: 768px) 100vw, 50vw" />
+                    {renderGalleryMedia(i + 1, 900, '(max-width: 768px) 100vw, 50vw')}
                   </button>
                 </div>
               );
             } else {
               rows.push(
                 <button
-                  key={img1}
+                  key={`${media1.type}-${media1.src}-${i}`}
                   type="button"
                   className={styles.galleryItemFull}
                   onClick={() => openLightbox(i)}
-                  aria-label={language === 'ru'
-                    ? `Открыть изображение ${i + 1} проекта ${project.title}`
-                    : `Open image ${i + 1} from ${project.title}`}
+                  aria-label={mediaLabel(i)}
                 >
-                  <CloudinaryImage src={img1} alt={`${project.title} - ${i + 1}`} width={1600} sizes="100vw" />
+                  {renderGalleryMedia(i, 1600, '100vw')}
                 </button>
               );
             }
@@ -347,12 +369,12 @@ export default function ProjectDetail() {
 
       {createPortal(
         <AnimatePresence>
-          {lightboxOpen && galleryImages.length > 0 && (
+          {lightboxOpen && galleryMedia.length > 0 && lightboxMedia && (
             <motion.div
               className={styles.lightbox}
               role="dialog"
               aria-modal="true"
-              aria-label={language === 'ru' ? 'Просмотр изображений проекта' : 'Project image viewer'}
+              aria-label={language === 'ru' ? 'Просмотр медиафайлов проекта' : 'Project media viewer'}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -361,7 +383,7 @@ export default function ProjectDetail() {
                 type="button"
                 className={styles.closeBtn}
                 onClick={closeLightbox}
-                aria-label={language === 'ru' ? 'Закрыть просмотр изображений' : 'Close image viewer'}
+                aria-label={language === 'ru' ? 'Закрыть просмотр медиафайлов' : 'Close media viewer'}
               >
                 <svg
                   className={styles.closeBtnIcon}
@@ -378,7 +400,7 @@ export default function ProjectDetail() {
               </button>
               <button
                 type="button"
-                aria-label="Предыдущее изображение"
+                aria-label={language === 'ru' ? 'Предыдущий медиафайл' : 'Previous media'}
                 className={`${styles.navZone} ${styles.navLeft}`}
                 onClick={goPrev}
                 onMouseEnter={(event) => showGlassCursor('prev', event)}
@@ -387,7 +409,7 @@ export default function ProjectDetail() {
               />
               <button
                 type="button"
-                aria-label="Следующее изображение"
+                aria-label={language === 'ru' ? 'Следующий медиафайл' : 'Next media'}
                 className={`${styles.navZone} ${styles.navRight}`}
                 onClick={goNext}
                 onMouseEnter={(event) => showGlassCursor('next', event)}
@@ -413,7 +435,7 @@ export default function ProjectDetail() {
               >
                 <AnimatePresence initial={false} custom={slideDirection}>
                   <motion.div
-                    key={currentImgIndex}
+                    key={`${lightboxMedia.type}-${lightboxMedia.src}-${currentImgIndex}`}
                     className={styles.lightboxSlide}
                     custom={slideDirection}
                     variants={lightboxSlideVariants}
@@ -422,13 +444,36 @@ export default function ProjectDetail() {
                     exit="exit"
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <CloudinaryImage
-                      src={lightboxSrc}
-                      alt="Увеличенное изображение"
-                      width={2400}
-                      sizes="100vw"
-                      loading="eager"
-                    />
+                    {lightboxMedia.type === 'video' ? (
+                      <CloudinaryVideo
+                        src={lightboxMedia.src}
+                        poster={lightboxMedia.poster}
+                        className={styles.lightboxVideo}
+                        width={2400}
+                        autoPlay
+                        controls
+                        loop
+                        preload="auto"
+                        ariaLabel={language === 'ru' ? `Видео проекта ${project.title}` : `${project.title} project video`}
+                        onClick={event => event.stopPropagation()}
+                        onMouseEnter={event => {
+                          event.stopPropagation();
+                          setLightboxCursor(null);
+                        }}
+                        onMouseMove={event => {
+                          event.stopPropagation();
+                          setLightboxCursor(null);
+                        }}
+                      />
+                    ) : (
+                      <CloudinaryImage
+                        src={lightboxMedia.src}
+                        alt="Увеличенное изображение"
+                        width={2400}
+                        sizes="100vw"
+                        loading="eager"
+                      />
+                    )}
                   </motion.div>
                 </AnimatePresence>
               </motion.div>

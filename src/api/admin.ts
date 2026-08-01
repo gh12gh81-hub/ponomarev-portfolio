@@ -1,4 +1,4 @@
-import type { Project } from '@/types'
+import type { Project, ProjectMediaType } from '@/types'
 
 interface ApiErrorPayload {
   error?: string
@@ -28,6 +28,7 @@ interface CloudinarySignature {
   timestamp: number
   uniqueFilename: boolean
   useFilename: boolean
+  resourceType: ProjectMediaType
   uploadUrl: string
 }
 
@@ -37,6 +38,8 @@ interface CloudinaryUploadResponse {
   width: number
   height: number
   format: string
+  duration?: number
+  resource_type?: ProjectMediaType
 }
 
 interface CloudinaryErrorResponse {
@@ -44,11 +47,13 @@ interface CloudinaryErrorResponse {
 }
 
 export interface UploadedAsset {
+  type: ProjectMediaType
   publicId: string
   secureUrl: string
   width: number
   height: number
   format: string
+  duration?: number
 }
 
 async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
@@ -87,13 +92,20 @@ export const saveAdminProjects = (projects: Project[]) => request<SaveProjectsRe
   body: JSON.stringify({ projects }),
 })
 
-export async function uploadAdminImage(file: File, slug: string): Promise<UploadedAsset> {
-  if (!file.type.startsWith('image/')) throw new Error(`«${file.name}» не является изображением.`)
-  if (file.size > 25 * 1024 * 1024) throw new Error(`«${file.name}» больше 25 МБ.`)
+export async function uploadAdminMedia(file: File, slug: string): Promise<UploadedAsset> {
+  const type: ProjectMediaType | null = file.type.startsWith('image/')
+    ? 'image'
+    : file.type.startsWith('video/') ? 'video' : null
+
+  if (!type) throw new Error(`«${file.name}» не является изображением или видео.`)
+  const maxSizeMb = type === 'video' ? 100 : 25
+  if (file.size > maxSizeMb * 1024 * 1024) {
+    throw new Error(`«${file.name}» больше ${maxSizeMb} МБ.`)
+  }
 
   const signed = await request<CloudinarySignature>('/api/admin/cloudinary-signature', {
     method: 'POST',
-    body: JSON.stringify({ slug }),
+    body: JSON.stringify({ slug, resourceType: type }),
   })
   const form = new FormData()
   form.append('file', file)
@@ -109,10 +121,12 @@ export async function uploadAdminImage(file: File, slug: string): Promise<Upload
   if (!response.ok) throw new Error(payload.error?.message || `Не удалось загрузить «${file.name}».`)
 
   return {
+    type: payload.resource_type === 'video' ? 'video' : type,
     publicId: payload.public_id,
     secureUrl: payload.secure_url,
     width: payload.width,
     height: payload.height,
     format: payload.format,
+    duration: payload.duration,
   }
 }

@@ -15,6 +15,16 @@ export interface ProjectTranslation {
   solution: string
 }
 
+export type ProjectMediaType = 'image' | 'video'
+
+export interface ProjectMediaItem {
+  type: ProjectMediaType
+  src: string
+  poster?: string
+}
+
+export type ProjectGalleryItem = string | ProjectMediaItem
+
 export interface Project {
   id: number
   title: string
@@ -35,5 +45,5 @@ export interface Project {
   cover: string
   hero?: string      // <-- Добавили
   banner?: string    // <-- Добавили
-  gallery: string[]
+  gallery: ProjectGalleryItem[]
 }

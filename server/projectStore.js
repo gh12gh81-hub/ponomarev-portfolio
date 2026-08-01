@@ -28,6 +28,19 @@ const translation = (value, legacy, language) => {
   }
 }
 
+const galleryItem = (value, index) => {
+  if (typeof value === 'string') return text(value, 500, `gallery ${index + 1}`, true)
+  if (!value || typeof value !== 'object') {
+    throw new Error(`Медиафайл ${index + 1} в галерее имеет неверный формат.`)
+  }
+
+  const type = value.type === 'video' ? 'video' : value.type === 'image' ? 'image' : ''
+  if (!type) throw new Error(`У медиафайла ${index + 1} указан неверный тип.`)
+  const src = text(value.src, 500, `gallery ${index + 1} src`, true)
+  const poster = text(value.poster, 500, `gallery ${index + 1} poster`)
+  return { type, src, ...(poster ? { poster } : {}) }
+}
+
 function normalizeProject(value, index) {
   if (!value || typeof value !== 'object') throw new Error(`Проект ${index + 1} имеет неверный формат.`)
 
@@ -57,9 +70,9 @@ function normalizeProject(value, index) {
   const layout = LAYOUTS.has(value.layout) ? value.layout : 'square'
   const cover = text(value.cover, 500, 'cover', true)
   const gallery = Array.isArray(value.gallery)
-    ? value.gallery.map((item, imageIndex) => text(item, 500, `gallery ${imageIndex + 1}`, true))
+    ? value.gallery.map(galleryItem)
     : []
-  if (gallery.length > 100) throw new Error(`В проекте «${slug}» больше 100 изображений.`)
+  if (gallery.length > 100) throw new Error(`В проекте «${slug}» больше 100 медиафайлов.`)
 
   return {
     id,

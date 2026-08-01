@@ -120,7 +120,12 @@
   outline: 2px solid #d00000;
   outline-offset: 4px;
 }
-.galleryItemFull img, .galleryItemHalf img { width: 100%; height: auto; display: block; }
+.galleryItemFull img,
+.galleryItemHalf img,
+.galleryItemFull video,
+.galleryItemHalf video { width: 100%; height: auto; display: block; }
+.galleryItemFull video,
+.galleryItemHalf video { pointer-events: none; background: #080808; }
 
 /* --- СЛЕДУЮЩИЙ ПРОЕКТ --- */
 .nextProject {
@@ -171,6 +176,16 @@
 .lightboxContent { position: relative; width: 95vw; height: 85vh; overflow: hidden; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 5; }
 .lightboxSlide { position: absolute; inset: 0; display: flex; justify-content: center; align-items: center; }
 .lightboxSlide img { width: 100%; height: 100%; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,0.8); border-radius: 4px; pointer-events: none; }
+.lightboxVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  background: #000;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  cursor: auto;
+  pointer-events: auto;
+}
 .closeBtn { display: none; position: absolute; top: 40px; right: 40px; background: transparent; border: none; color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 10000; transition: 0.3s; }
 .closeBtn:hover,
 .closeBtn:focus-visible,

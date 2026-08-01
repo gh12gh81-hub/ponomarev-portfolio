@@ -1,6 +1,6 @@
 # Nikolai Ponomarev — Portfolio
 
-Персональное портфолио на React, TypeScript и Vite. Публичная версия получает проекты из `public/data/projects.json`, изображения доставляются через Cloudinary, публикация выполняется на Vercel.
+Персональное портфолио на React, TypeScript и Vite. Публичная версия получает проекты из `public/data/projects.json`, изображения и видео доставляются через Cloudinary, публикация выполняется на Vercel.
 
 ## Запуск
 
