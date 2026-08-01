@@ -1,5 +1,45 @@
 [
   {
+    "id": 8,
+    "title": "Pioner Cinema",
+    "slug": "pioner",
+    "year": "2026",
+    "category": "Branding",
+    "services": [
+      "ui-ux",
+      "brand-identity"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Кинотеатр Пионер",
+        "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
+        "challenge": "Подобрать шрифтовую пару для кинотеатра, которая выглядит ретро и современно одновременно.",
+        "solution": "Комбинация элегантного Playfair Display для заголовков и гротеска Inter для текстов создала атмосферу старого кино с новым звучанием."
+      },
+      "en": {
+        "client": "Pioner Cinema",
+        "description": "Font pair selection for the ecosystem of the Pioner brand.",
+        "challenge": "Select a font pair for a cinema that looks retro and modern at the same time.",
+        "solution": "The combination of elegant Playfair Display for headlines and grotesque Inter for texts created the atmosphere of old cinema with a new sound."
+      }
+    },
+    "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
+    "layout": "wide",
+    "client": "Кинотеатр Пионер",
+    "tools": "Illustrator, Photoshop, InDesign",
+    "challenge": "Подобрать шрифтовую пару для кинотеатра, которая выглядит ретро и современно одновременно.",
+    "solution": "Комбинация элегантного Playfair Display для заголовков и гротеска Inter для текстов создала атмосферу старого кино с новым звучанием.",
+    "cover": "coverfilm_dwrxbl.jpg",
+    "hero": "coverfilm_dwrxbl.jpg",
+    "banner": "",
+    "gallery": [
+      "Playfair_Display_inter_3__yrztfd.jpg",
+      "Tikket_oqxry3.jpg",
+      "telefon_b1y63l.jpg",
+      "mac_Playfair_Display_inter_qnccc1.jpg"
+    ]
+  },
+  {
     "id": 1,
     "title": "Р-Флот",
     "slug": "r-flot",
@@ -305,46 +345,6 @@
       "1_jxwfdh.jpg",
       "2_voggzp.jpg",
       "3_h8ddmu.jpg"
-    ]
-  },
-  {
-    "id": 8,
-    "title": "Pioner Cinema",
-    "slug": "pioner",
-    "year": "2026",
-    "category": "Branding",
-    "services": [
-      "ui-ux",
-      "brand-identity"
-    ],
-    "translations": {
-      "ru": {
-        "client": "Кинотеатр Пионер",
-        "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
-        "challenge": "Подобрать шрифтовую пару для кинотеатра, которая выглядит ретро и современно одновременно.",
-        "solution": "Комбинация элегантного Playfair Display для заголовков и гротеска Inter для текстов создала атмосферу старого кино с новым звучанием."
-      },
-      "en": {
-        "client": "Pioner Cinema",
-        "description": "Font pair selection for the ecosystem of the Pioner brand.",
-        "challenge": "Select a font pair for a cinema that looks retro and modern at the same time.",
-        "solution": "The combination of elegant Playfair Display for headlines and grotesque Inter for texts created the atmosphere of old cinema with a new sound."
-      }
-    },
-    "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
-    "layout": "wide",
-    "client": "Кинотеатр Пионер",
-    "tools": "Illustrator, Photoshop, InDesign",
-    "challenge": "Подобрать шрифтовую пару для кинотеатра, которая выглядит ретро и современно одновременно.",
-    "solution": "Комбинация элегантного Playfair Display для заголовков и гротеска Inter для текстов создала атмосферу старого кино с новым звучанием.",
-    "cover": "coverfilm_dwrxbl.jpg",
-    "hero": "coverfilm_dwrxbl.jpg",
-    "banner": "",
-    "gallery": [
-      "Playfair_Display_inter_3__yrztfd.jpg",
-      "Tikket_oqxry3.jpg",
-      "telefon_b1y63l.jpg",
-      "mac_Playfair_Display_inter_qnccc1.jpg"
     ]
   },
   {
