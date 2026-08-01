@@ -200,7 +200,7 @@
     "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
     "layout": "wide",
     "client": "Arc'teryx",
-    "tools": "InDesign, Illustrator",
+    "tools": "Illustrator, Photoshop, InDesign",
     "challenge": "Разработать модульную сетку для буклета, которая вмещает большие фотографии природы и минимальный текст.",
     "solution": "Реализована концепция «воздуха и гор»: огромные разворотные изображения чередуются с тонкой типографикой.",
     "cover": "10_xab9co.jpg",
