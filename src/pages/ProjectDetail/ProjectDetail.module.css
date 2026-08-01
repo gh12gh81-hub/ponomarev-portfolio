@@ -227,7 +227,6 @@
 .closeBtn:active { color: #d00000; }
 .closeBtnIcon { display: block; width: 24px; height: 24px; }
 .closeBtnVideo {
-  display: inline-flex;
   top: calc(16px + env(safe-area-inset-top, 0px));
   right: calc(16px + env(safe-area-inset-right, 0px));
   width: 52px;
@@ -265,6 +264,10 @@
   width: 25px;
   height: 25px;
   filter: drop-shadow(0 1px 4px rgba(72, 0, 0, 0.32));
+}
+
+@media (hover: none), (pointer: coarse), (any-pointer: coarse) {
+  .closeBtnVideo { display: inline-flex; }
 }
 
 .glassCursor {
