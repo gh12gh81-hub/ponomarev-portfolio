@@ -383,6 +383,13 @@ export default function ProjectDetail() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              onClick={event => {
+                if (event.target === event.currentTarget) closeLightbox();
+              }}
+              onMouseMove={event => {
+                if (event.target === event.currentTarget) showGlassCursor('close', event);
+              }}
+              onMouseLeave={() => setLightboxCursor(null)}
             >
               <button
                 type="button"
