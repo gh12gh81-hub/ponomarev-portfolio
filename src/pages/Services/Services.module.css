@@ -5,6 +5,7 @@
   height: 70vh; display: flex; align-items: center; justify-content: flex-start;
   padding: 0 48px; background: #000;
 }
+.servicesHero { height: 50vh; }
 .textHeroContent { max-width: 800px; }
 
 .eyebrow {
@@ -227,6 +228,14 @@
 
 @media (max-width: 768px) {
   .textHero { padding: 0 24px; height: 50vh; }
+  .servicesHero {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 50vh;
+    padding-top: calc(96px + env(safe-area-inset-top, 0px));
+    padding-bottom: 48px;
+    align-items: flex-start;
+  }
   .title { font-size: 3rem; }
   .storyBlock { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
   .servicesGrid { grid-template-columns: 1fr; padding: 40px 24px 80px; }

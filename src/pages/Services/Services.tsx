@@ -15,7 +15,7 @@ export default function Services() {
           ? 'Брендинг, упаковка, UI/UX, motion design и арт-дирекшн от Николая Пономарева.'
           : 'Branding, packaging, UI/UX, motion design and art direction by Nikolai Ponomarev.'}
       />
-      <div className={styles.textHero} style={{ height: '50vh' }}>
+      <div className={`${styles.textHero} ${styles.servicesHero}`}>
         <div className={styles.textHeroContent}>
           <h1 className={styles.title}>{t('services.title')}</h1>
           <p className={styles.description}>{typography(t('services.subtitle'))}</p>
