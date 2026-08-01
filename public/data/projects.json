@@ -131,7 +131,7 @@
     "title": "CyberRT",
     "slug": "cyberrt",
     "year": "2026",
-    "category": "Esports Branding",
+    "category": "Motion Design, Art Direction, Esports Branding",
     "services": [
       "brand-identity",
       "ui-ux",
@@ -171,7 +171,11 @@
       "Grand_Stiker_liq5fj.png",
       "sticker_bn2ngf.png",
       "image_5_dwjmcn.png",
-      "zal8_m60wsm.jpg"
+      "zal8_m60wsm.jpg",
+      {
+        "type": "video",
+        "src": "portfolio/projects/cyberrt/соул2_pybqjk"
+      }
     ]
   },
   {
