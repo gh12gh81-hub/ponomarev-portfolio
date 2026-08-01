@@ -5,11 +5,27 @@
     "slug": "r-flot",
     "year": "2026",
     "category": "Event Identity",
-    "services": ["motion-design"],
+    "services": [
+      "motion-design"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Р-Флот",
+        "description": "Пригласительная кампания для судостроительного комплекса Р-Флот.",
+        "challenge": "Создать уникальную пригласительную кампанию, которая отражала бы масштаб судостроения и инновации комплекса.",
+        "solution": "Разработан минималистичный чертежный стиль с акцентным синим цветом, который объединяет техническую эстетику и роскошь мероприятия."
+      },
+      "en": {
+        "client": "R-Flot",
+        "description": "Invitation campaign for the shipbuilding complex R-Flot.",
+        "challenge": "Create a unique invitation campaign that reflects the scale of shipbuilding and the innovations of the complex.",
+        "solution": "A minimalist drafting style with an accent blue color was developed, combining technical aesthetics and the luxury of the event."
+      }
+    },
     "description": "Пригласительная кампания для судостроительного комплекса Р-Флот.",
     "layout": "wide",
     "client": "Р-Флот",
-    "tools": "Illustrator, Photoshop",
+    "tools": "Illustrator, Photoshop, InDesign",
     "challenge": "Создать уникальную пригласительную кампанию, которая отражала бы масштаб судостроения и инновации комплекса.",
     "solution": "Разработан минималистичный чертежный стиль с акцентным синим цветом, который объединяет техническую эстетику и роскошь мероприятия.",
     "cover": "coverR_gl999s.png",
@@ -28,7 +44,25 @@
     "slug": "accent",
     "year": "2025",
     "category": "Fashion Branding",
-    "services": ["brand-identity", "packaging", "art-direction"],
+    "services": [
+      "brand-identity",
+      "packaging",
+      "art-direction"
+    ],
+    "translations": {
+      "ru": {
+        "client": "ACCENT",
+        "description": "Айдентика бренда одежды и дизайн карточек маркетплейса.",
+        "challenge": "Выделить люксовый бренд одежды среди сотен конкурентов на маркетплейсах и в социальных сетях.",
+        "solution": "Создана минималистичная айдентика на контрасте черного и яркого акцента, внедренная во все носители от упаковки до мокапов."
+      },
+      "en": {
+        "client": "ACCENT",
+        "description": "Clothing brand identity and marketplace card design.",
+        "challenge": "Stand out a luxury clothing brand among hundreds of competitors on marketplaces and social networks.",
+        "solution": "Minimalist identity on the contrast of black and bright accent was created, implemented into all media from packaging to mockups."
+      }
+    },
     "description": "Айдентика бренда одежды и дизайн карточек маркетплейса.",
     "layout": "square",
     "client": "ACCENT",
@@ -53,7 +87,23 @@
     "slug": "sber-ea-pharmacy",
     "year": "2026",
     "category": "Packaging Design",
-    "services": ["packaging"],
+    "services": [
+      "packaging"
+    ],
+    "translations": {
+      "ru": {
+        "client": "СберЕАПТЕКА",
+        "description": "Концепция упаковки БАД с современной медицинской айдентикой.",
+        "challenge": "Разработать упаковку БАД, которая внушает доверие, выглядит современно и соответствует строгим медицинским стандартам.",
+        "solution": "Использована чистая типографика, микро-графика и строгая цветовая палитра, чтобы подчеркнуть премиальное качество продукта."
+      },
+      "en": {
+        "client": "SberEAPharmacy",
+        "description": "Concept of dietary supplement packaging with modern medical identity.",
+        "challenge": "Develop dietary supplement packaging that inspires trust, looks modern, and meets strict medical standards.",
+        "solution": "Clean typography, micro-graphics and a strict color palette were used to highlight the premium quality of the product."
+      }
+    },
     "description": "Концепция упаковки БАД с современной медицинской айдентикой.",
     "layout": "tall",
     "client": "СберЕАПТЕКА",
@@ -82,7 +132,25 @@
     "slug": "cyberrt",
     "year": "2026",
     "category": "Esports Branding",
-    "services": ["brand-identity", "ui-ux", "motion-design"],
+    "services": [
+      "brand-identity",
+      "ui-ux",
+      "motion-design"
+    ],
+    "translations": {
+      "ru": {
+        "client": "CyberRT",
+        "description": "Фирменный стиль, HUD и рекламные материалы киберспортивной команды.",
+        "challenge": "Создать агрессивную, технологичную айдентику для киберспортивной команды, которая будет выделяться на трансляциях.",
+        "solution": "Разработан яркий неоновый стиль с контрастным логотипом, внедренный в мерч, HUD и рекламные макеты."
+      },
+      "en": {
+        "client": "CyberRT",
+        "description": "Corporate identity, HUD and advertising materials for an esports team.",
+        "challenge": "Create an aggressive, technological identity for an esports team that will stand out on broadcasts.",
+        "solution": "A bright neon style with a contrasting logo was developed, implemented into merch, HUD and advertising layouts."
+      }
+    },
     "description": "Фирменный стиль, HUD и рекламные материалы киберспортивной команды.",
     "layout": "square",
     "client": "CyberRT",
@@ -112,7 +180,23 @@
     "slug": "arc-teryx",
     "year": "2026",
     "category": "Compositional magazine layout",
-    "services": ["art-direction"],
+    "services": [
+      "art-direction"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Arc'teryx",
+        "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
+        "challenge": "Разработать модульную сетку для буклета, которая вмещает большие фотографии природы и минимальный текст.",
+        "solution": "Реализована концепция «воздуха и гор»: огромные разворотные изображения чередуются с тонкой типографикой."
+      },
+      "en": {
+        "client": "Arc'teryx",
+        "description": "24-page booklet template for Arc’teryx.",
+        "challenge": "Develop a modular grid for a booklet that accommodates large nature photographs and minimal text.",
+        "solution": "The concept of \"air and mountains\" was realized: huge double-page images alternate with thin typography."
+      }
+    },
     "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
     "layout": "wide",
     "client": "Arc'teryx",
@@ -143,7 +227,24 @@
     "slug": "offf-moscow",
     "year": "2024",
     "category": "Event Identity",
-    "services": ["motion-design", "art-direction"],
+    "services": [
+      "motion-design",
+      "art-direction"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Offf Moscow",
+        "description": "Фестиваль дизайна и цифрового искусства.",
+        "challenge": "Разработать айдентику для фестиваля, объединяющую digital-арт, типографику и урбанистику.",
+        "solution": "Создана яркая контрастная визуальная система на основе геометрии и мощного шрифтового акцента."
+      },
+      "en": {
+        "client": "Offf Moscow",
+        "description": "Design and digital art festival.",
+        "challenge": "Develop an identity for a festival that combines digital art, typography and urbanism.",
+        "solution": "A bright contrasting visual system based on geometry and a powerful typographic accent was created."
+      }
+    },
     "description": "Фестиваль дизайна и цифрового искусства.",
     "layout": "square",
     "client": "Offf Moscow",
@@ -169,7 +270,24 @@
     "slug": "the-trip",
     "year": "2026",
     "category": "Brand Identity",
-    "services": ["brand-identity", "ui-ux"],
+    "services": [
+      "brand-identity",
+      "ui-ux"
+    ],
+    "translations": {
+      "ru": {
+        "client": "The Trip",
+        "description": "Айдентика тревел-блога и цифровые носители.",
+        "challenge": "Создать айдентику, которая передает атмосферу путешествий и вдохновляет на поездки.",
+        "solution": "Была выбрана кинематографичная цветовая палитра и крупная типографика, создающие ощущение дорогого глянцевого журнала."
+      },
+      "en": {
+        "client": "The Trip",
+        "description": "Travel blog identity and digital media.",
+        "challenge": "Create an identity that conveys the atmosphere of travel and inspires trips.",
+        "solution": "A cinematic color palette and large typography were chosen, creating the feeling of an expensive glossy magazine."
+      }
+    },
     "description": "Айдентика тревел-блога и цифровые носители.",
     "layout": "square",
     "client": "The Trip",
@@ -191,7 +309,23 @@
     "slug": "pioner",
     "year": "2026",
     "category": "Branding",
-    "services": ["ui-ux"],
+    "services": [
+      "ui-ux"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Кинотеатр Пионер",
+        "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
+        "challenge": "Подобрать шрифтовую пару для кинотеатра, которая выглядит ретро и современно одновременно.",
+        "solution": "Комбинация элегантного Playfair Display для заголовков и гротеска Inter для текстов создала атмосферу старого кино с новым звучанием."
+      },
+      "en": {
+        "client": "Pioner Cinema",
+        "description": "Font pair selection for the ecosystem of the Pioner brand.",
+        "challenge": "Select a font pair for a cinema that looks retro and modern at the same time.",
+        "solution": "The combination of elegant Playfair Display for headlines and grotesque Inter for texts created the atmosphere of old cinema with a new sound."
+      }
+    },
     "description": "Подбор шрифтовой пары для экосистемы бренда «Пионер».",
     "layout": "square",
     "client": "Кинотеатр Пионер",
@@ -214,10 +348,26 @@
     "slug": "le-petyt-paris",
     "year": "2023",
     "category": "Branding",
-    "services": ["packaging"],
+    "services": [
+      "packaging"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Малый бизнес семейная булочная",
+        "description": "Создать логотип по брифу заказчика.",
+        "challenge": "Разработка логотипа для семейной пекарни, который отражает французскую эстетику и домашний уют.",
+        "solution": "В логотипе скрыты имена владельцев, а также использован шрифт с рукописным характером, создающий ощущение ручной работы и тепла."
+      },
+      "en": {
+        "client": "Small business family bakery",
+        "description": "Create a logo according to the client's brief.",
+        "challenge": "Development of a logo for a family bakery that reflects French aesthetics and home comfort.",
+        "solution": "The logo hides the owners' names, and a font with a handwritten character was used, creating a feeling of handmade work and warmth."
+      }
+    },
     "description": "Создать логотип по брифу заказчика.",
     "layout": "square",
-    "client": "Малый бизнес семейная булучная",
+    "client": "Малый бизнес семейная булочная",
     "tools": "Illustrator, Photoshop",
     "challenge": "Разработка логотипа для семейной пекарни, который отражает французскую эстетику и домашний уют.",
     "solution": "В логотипе скрыты имена владельцев, а также использован шрифт с рукописным характером, создающий ощущение ручной работы и тепла.",
@@ -228,6 +378,6 @@
       "Cirkel2_esyxrc.jpg",
       "menus_x3gwxl.jpg",
       "витрина_yuw0sm.jpg"
-      ]
+    ]
   }
 ]
