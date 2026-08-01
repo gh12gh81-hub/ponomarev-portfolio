@@ -82,6 +82,53 @@
     ]
   },
   {
+    "id": 5,
+    "title": "ARC’TERYX",
+    "slug": "arc-teryx",
+    "year": "2026",
+    "category": "Compositional magazine layout",
+    "services": [
+      "art-direction"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Arc'teryx",
+        "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
+        "challenge": "Разработать модульную сетку для буклета, которая вмещает большие фотографии природы и минимальный текст.",
+        "solution": "Реализована концепция «воздуха и гор»: огромные разворотные изображения чередуются с тонкой типографикой."
+      },
+      "en": {
+        "client": "Arc'teryx",
+        "description": "24-page booklet template for Arc’teryx.",
+        "challenge": "Develop a modular grid for a booklet that accommodates large nature photographs and minimal text.",
+        "solution": "The concept of \"air and mountains\" was realized: huge double-page images alternate with thin typography."
+      }
+    },
+    "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
+    "layout": "wide",
+    "client": "Arc'teryx",
+    "tools": "Illustrator, Photoshop, InDesign",
+    "challenge": "Разработать модульную сетку для буклета, которая вмещает большие фотографии природы и минимальный текст.",
+    "solution": "Реализована концепция «воздуха и гор»: огромные разворотные изображения чередуются с тонкой типографикой.",
+    "cover": "10_xab9co.jpg",
+    "hero": "10_xab9co.jpg",
+    "banner": "",
+    "gallery": [
+      "12_onptqp.jpg",
+      "23_vy2i5p.jpg",
+      "34_sd6ppn.jpg",
+      "45_g18hil.jpg",
+      "56_pdn4mv.jpg",
+      "67_ndpoif.jpg",
+      "78_a9kqqe.jpg",
+      "89_al4tk5.jpg",
+      "910_gzqkmk.jpg",
+      "1011_a0bhqj.jpg",
+      "1112_pdezup.jpg",
+      "1213_txbrqk.jpg"
+    ]
+  },
+  {
     "id": 3,
     "title": "SBER EA Pharmacy",
     "slug": "sber-ea-pharmacy",
@@ -176,53 +223,6 @@
         "type": "video",
         "src": "portfolio/projects/cyberrt/соул2_pybqjk"
       }
-    ]
-  },
-  {
-    "id": 5,
-    "title": "ARC’TERYX",
-    "slug": "arc-teryx",
-    "year": "2026",
-    "category": "Compositional magazine layout",
-    "services": [
-      "art-direction"
-    ],
-    "translations": {
-      "ru": {
-        "client": "Arc'teryx",
-        "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
-        "challenge": "Разработать модульную сетку для буклета, которая вмещает большие фотографии природы и минимальный текст.",
-        "solution": "Реализована концепция «воздуха и гор»: огромные разворотные изображения чередуются с тонкой типографикой."
-      },
-      "en": {
-        "client": "Arc'teryx",
-        "description": "24-page booklet template for Arc’teryx.",
-        "challenge": "Develop a modular grid for a booklet that accommodates large nature photographs and minimal text.",
-        "solution": "The concept of \"air and mountains\" was realized: huge double-page images alternate with thin typography."
-      }
-    },
-    "description": "Шаблон буклета на 24 полосы для компании Arc’teryx.",
-    "layout": "wide",
-    "client": "Arc'teryx",
-    "tools": "Illustrator, Photoshop, InDesign",
-    "challenge": "Разработать модульную сетку для буклета, которая вмещает большие фотографии природы и минимальный текст.",
-    "solution": "Реализована концепция «воздуха и гор»: огромные разворотные изображения чередуются с тонкой типографикой.",
-    "cover": "10_xab9co.jpg",
-    "hero": "10_xab9co.jpg",
-    "banner": "",
-    "gallery": [
-      "12_onptqp.jpg",
-      "23_vy2i5p.jpg",
-      "34_sd6ppn.jpg",
-      "45_g18hil.jpg",
-      "56_pdn4mv.jpg",
-      "67_ndpoif.jpg",
-      "78_a9kqqe.jpg",
-      "89_al4tk5.jpg",
-      "910_gzqkmk.jpg",
-      "1011_a0bhqj.jpg",
-      "1112_pdezup.jpg",
-      "1213_txbrqk.jpg"
     ]
   },
   {
