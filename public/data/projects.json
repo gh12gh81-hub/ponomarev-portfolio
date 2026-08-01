@@ -6,7 +6,7 @@
     "year": "2026",
     "category": "Event Identity",
     "services": [
-      "motion-design"
+      "brand-identity"
     ],
     "translations": {
       "ru": {
@@ -232,8 +232,8 @@
     "year": "2024",
     "category": "Event Identity",
     "services": [
-      "motion-design",
-      "art-direction"
+      "art-direction",
+      "brand-identity"
     ],
     "translations": {
       "ru": {
@@ -314,7 +314,8 @@
     "year": "2026",
     "category": "Branding",
     "services": [
-      "ui-ux"
+      "ui-ux",
+      "brand-identity"
     ],
     "translations": {
       "ru": {
