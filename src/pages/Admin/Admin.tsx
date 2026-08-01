@@ -27,6 +27,81 @@ const serviceLabels: Record<ServiceCategory, string> = {
   'art-direction': 'Art Direction',
 }
 
+const cardCategoryOptions = [
+  'Brand Identity',
+  'Packaging',
+  'UI / UX',
+  'Motion Design',
+  'Art Direction',
+]
+
+const toolOptions = [
+  'Illustrator',
+  'Photoshop',
+  'Figma',
+  'InDesign',
+  'CorelDRAW',
+  'After Effects',
+  'Frontend Development',
+]
+
+const splitSelection = (value: string) => [...new Set(
+  value.split(',').map(item => item.trim()).filter(Boolean),
+)]
+
+interface CheckboxDropdownProps {
+  label: string
+  options: string[]
+  value: string
+  onChange: (value: string) => void
+}
+
+function CheckboxDropdown({ label, options, value, onChange }: CheckboxDropdownProps) {
+  const selected = splitSelection(value)
+  const legacyOptions = selected.filter(item => !options.includes(item))
+  const visibleOptions = [...options, ...legacyOptions]
+
+  const toggleOption = (option: string) => {
+    const nextSelection = selected.includes(option)
+      ? selected.filter(item => item !== option)
+      : [...selected, option]
+    const orderedSelection = [
+      ...options.filter(item => nextSelection.includes(item)),
+      ...nextSelection.filter(item => !options.includes(item)),
+    ]
+    onChange(orderedSelection.join(', '))
+  }
+
+  return (
+    <div className={styles.multiSelectField}>
+      <span className={styles.multiSelectLabel}>{label}</span>
+      <details className={styles.checkboxDropdown}>
+        <summary>
+          <span>{selected.length > 0 ? selected.join(', ') : 'Выберите из списка'}</span>
+          <span className={styles.dropdownChevron} aria-hidden="true">⌄</span>
+        </summary>
+        <div className={styles.checkboxDropdownPanel} role="group" aria-label={label}>
+          {visibleOptions.map(option => {
+            const checked = selected.includes(option)
+            const legacy = legacyOptions.includes(option)
+            return (
+              <label key={option} className={checked ? styles.dropdownOptionChecked : ''}>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggleOption(option)}
+                  aria-label={`${label}: ${option}`}
+                />
+                <span>{option}{legacy ? ' — текущее значение' : ''}</span>
+              </label>
+            )
+          })}
+        </div>
+      </details>
+    </div>
+  )
+}
+
 const emptyTranslation = (): ProjectTranslation => ({
   client: '',
   description: '',
@@ -439,14 +514,18 @@ export default function Admin() {
                     <span>Год</span>
                     <input value={selectedProject.year} onChange={event => updateSelected(project => ({ ...project, year: event.target.value }))} />
                   </label>
-                  <label>
-                    <span>Категория на карточке</span>
-                    <input value={selectedProject.category} onChange={event => updateSelected(project => ({ ...project, category: event.target.value }))} />
-                  </label>
-                  <label>
-                    <span>Инструменты</span>
-                    <input value={selectedProject.tools || ''} onChange={event => updateSelected(project => ({ ...project, tools: event.target.value }))} />
-                  </label>
+                  <CheckboxDropdown
+                    label="Категория на карточке"
+                    options={cardCategoryOptions}
+                    value={selectedProject.category}
+                    onChange={category => updateSelected(project => ({ ...project, category }))}
+                  />
+                  <CheckboxDropdown
+                    label="Инструменты"
+                    options={toolOptions}
+                    value={selectedProject.tools || ''}
+                    onChange={tools => updateSelected(project => ({ ...project, tools }))}
+                  />
                   <label>
                     <span>Макет карточки</span>
                     <select value={selectedProject.layout || 'square'} onChange={event => updateSelected(project => ({ ...project, layout: event.target.value }))}>

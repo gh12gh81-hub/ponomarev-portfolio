@@ -51,6 +51,7 @@ export const Header = () => {
       >
         <span />
         <span />
+        <span />
       </button>
       {menuOpen && (
         <button

@@ -362,7 +362,20 @@ export default function ProjectDetail() {
                 className={styles.closeBtn}
                 onClick={closeLightbox}
                 aria-label={language === 'ru' ? 'Закрыть просмотр изображений' : 'Close image viewer'}
-              >✕</button>
+              >
+                <svg
+                  className={styles.closeBtnIcon}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 6 12 12" />
+                  <path d="M18 6 6 18" />
+                </svg>
+              </button>
               <button
                 type="button"
                 aria-label="Предыдущее изображение"
