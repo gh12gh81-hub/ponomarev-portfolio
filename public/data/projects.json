@@ -436,5 +436,41 @@
       "menus_x3gwxl.jpg",
       "витрина_yuw0sm.jpg"
     ]
+  },
+  {
+    "id": 10,
+    "title": "TravelBlog",
+    "slug": "travelblog",
+    "year": "2026",
+    "category": "UI / UX",
+    "services": [
+      "ui-ux"
+    ],
+    "translations": {
+      "ru": {
+        "client": "Компания Travel, ведущий игрок на рынке туристических услуг.",
+        "description": "TravelBlog — это веб-приложение для обмена опытом путешествий. Это платформа для обсуждения местных достопримечательностей, ресторанов, гостиниц и других аспектов поездок, цель которой — создать сообщество неравнодушных путешественников.",
+        "challenge": "Создать современную и удобную платформу TravelBlog для привлечения клиентов.",
+        "solution": "Разработанное  приложение привлечёт путешественников — потенциальных пользователей сайта Travel, что увеличит трафик. \nВ перспективе платформа может монетизироваться через рекламные объявления, партнёрские программы с туристическими\nагентствами и гостиницами, а также платные подписки на эксклюзивный контент."
+      },
+      "en": {
+        "client": "Travel Company is a leading player in the travel services market.",
+        "description": "TravelBlog is a web app for sharing travel experiences. It's a platform for discussing local attractions, restaurants, hotels, and other aspects of trips, with the goal of creating a community of passionate travelers.",
+        "challenge": "Create a modern and user-friendly TravelBlog platform to attract clients.",
+        "solution": "The developed app will attract travelers—potential users of the Travel site, which will increase traffic. In the long term, the platform could be monetized through ads, affiliate programs with travel agencies and hotels, as well as paid subscriptions for exclusive content."
+      }
+    },
+    "description": "TravelBlog — это веб-приложение для обмена опытом путешествий. Это платформа для обсуждения местных достопримечательностей, ресторанов, гостиниц и других аспектов поездок, цель которой — создать сообщество неравнодушных путешественников.",
+    "layout": "square",
+    "client": "Компания Travel, ведущий игрок на рынке туристических услуг.",
+    "tools": "Frontend Development",
+    "challenge": "Создать современную и удобную платформу TravelBlog для привлечения клиентов.",
+    "solution": "Разработанное  приложение привлечёт путешественников — потенциальных пользователей сайта Travel, что увеличит трафик. \nВ перспективе платформа может монетизироваться через рекламные объявления, партнёрские программы с туристическими\nагентствами и гостиницами, а также платные подписки на эксклюзивный контент.",
+    "cover": "portfolio/projects/travelblog/logo_i48xby",
+    "hero": "portfolio/projects/travelblog/logo_i48xby",
+    "banner": "",
+    "gallery": [
+      "portfolio/projects/new-project-10/Vite-App-08-06-2026_06_23_PM_xf1kzr"
+    ]
   }
 ]
