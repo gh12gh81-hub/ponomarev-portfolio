@@ -163,18 +163,66 @@
     "hero": "10_xab9co.jpg",
     "banner": "",
     "gallery": [
-      "12_onptqp.jpg",
-      "23_vy2i5p.jpg",
-      "34_sd6ppn.jpg",
-      "45_g18hil.jpg",
-      "56_pdn4mv.jpg",
-      "67_ndpoif.jpg",
-      "78_a9kqqe.jpg",
-      "89_al4tk5.jpg",
-      "910_gzqkmk.jpg",
-      "1011_a0bhqj.jpg",
-      "1112_pdezup.jpg",
-      "1213_txbrqk.jpg"
+      {
+        "type": "image",
+        "src": "12_onptqp.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "23_vy2i5p.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "34_sd6ppn.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "45_g18hil.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "56_pdn4mv.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "67_ndpoif.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "78_a9kqqe.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "89_al4tk5.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "910_gzqkmk.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "1011_a0bhqj.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "1112_pdezup.jpg",
+        "layout": "half"
+      },
+      {
+        "type": "image",
+        "src": "1213_txbrqk.jpg",
+        "layout": "half"
+      }
     ]
   },
   {
