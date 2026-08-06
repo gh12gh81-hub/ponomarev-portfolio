@@ -12,7 +12,8 @@ import styles from './Home.module.css'
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>()
   const { items: projects, status } = useSelector((state: RootState) => state.projects)
-  const [visibleCount, setVisibleCount] = useState(6)
+  const [visibleCount, setVisibleCount] = useState(7)
+  const [coverAspectRatios, setCoverAspectRatios] = useState<Record<string, number>>({})
   const { t, language } = useTranslation() // <-- Подключаем
 
   useEffect(() => {
@@ -31,6 +32,32 @@ export default function Home() {
 
     card.style.setProperty('--project-title-x', `${x}px`)
     card.style.setProperty('--project-title-y', `${y}px`)
+  }
+
+  const rememberCoverAspectRatio = (slug: string, width: number, height: number) => {
+    if (width <= 0 || height <= 0) return
+    const nextRatio = width / height
+    setCoverAspectRatios(current => (
+      Math.abs((current[slug] ?? 0) - nextRatio) < 0.001
+        ? current
+        : { ...current, [slug]: nextRatio }
+    ))
+  }
+
+  const getCoverAspectRatio = (project: (typeof projects)[number]) => (
+    coverAspectRatios[project.slug]
+    ?? (project.layout === 'wide' ? 2 : project.layout === 'tall' ? 0.75 : 1)
+  )
+
+  const visibleProjects = Array.isArray(projects)
+    ? projects.filter(project => project.cover).slice(0, visibleCount)
+    : []
+  const rowPattern = [2, 3, 2]
+  const projectRows = []
+  for (let index = 0, patternIndex = 0; index < visibleProjects.length; patternIndex += 1) {
+    const rowSize = rowPattern[patternIndex % rowPattern.length]
+    projectRows.push(visibleProjects.slice(index, index + rowSize))
+    index += rowSize
   }
 
   return (
@@ -59,40 +86,58 @@ export default function Home() {
       </section>
 
       <section className={styles.gallery}>
-        {Array.isArray(projects) && projects.filter(p => p.cover).slice(0, visibleCount).map((project, idx) => {
-          let layoutClass = styles.gridItem
-          if (project.layout === 'wide') layoutClass += ` ${styles.wide}`
-          if (project.layout === 'tall') layoutClass += ` ${styles.tall}`
-          const imageSizes = project.layout === 'wide'
-            ? '(max-width: 768px) 100vw, 66vw'
-            : '(max-width: 768px) 100vw, 33vw'
+        {projectRows.map((row, rowIndex) => (
+          <div className={styles.galleryRow} key={row.map(project => project.id).join('-')}>
+            {row.map((project, columnIndex) => {
+              const projectIndex = projectRows
+                .slice(0, rowIndex)
+                .reduce((total, previousRow) => total + previousRow.length, 0) + columnIndex
+              const coverAspectRatio = getCoverAspectRatio(project)
 
-          return (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.7, delay: idx * 0.1 }}
-              className={layoutClass}
-            >
-              <Link
-                to={`/projects/${project.slug}`}
-                className={`hoverable ${styles.projectLink}`}
-                onMouseEnter={moveProjectLabel}
-                onMouseMove={moveProjectLabel}
-              >
-                <CloudinaryImage src={project.cover} alt={project.title} width={1600} sizes={imageSizes} />
-                <div className={styles.overlay}>
-                  <div className={styles.floatingProjectLabel}>
-                    <span className={styles.title}>{project.title}</span>
-                    <span className={styles.category}>{project.category}</span>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          )
-        })}
+              return (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.7, delay: projectIndex * 0.1 }}
+                  className={styles.gridItem}
+                  style={{
+                    flexGrow: coverAspectRatio,
+                    aspectRatio: String(coverAspectRatio),
+                  }}
+                >
+                  <Link
+                    to={`/projects/${project.slug}`}
+                    className={`hoverable ${styles.projectLink}`}
+                    onMouseEnter={moveProjectLabel}
+                    onMouseMove={moveProjectLabel}
+                  >
+                    <CloudinaryImage
+                      src={project.cover}
+                      alt={project.title}
+                      width={1600}
+                      sizes={row.length === 2
+                        ? '(max-width: 768px) 100vw, 55vw'
+                        : '(max-width: 768px) 100vw, 40vw'}
+                      onLoad={event => rememberCoverAspectRatio(
+                        project.slug,
+                        event.currentTarget.naturalWidth,
+                        event.currentTarget.naturalHeight,
+                      )}
+                    />
+                    <div className={styles.overlay}>
+                      <div className={styles.floatingProjectLabel}>
+                        <span className={styles.title}>{project.title}</span>
+                        <span className={styles.category}>{project.category}</span>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              )
+            })}
+          </div>
+        ))}
       </section>
 
       {projects.filter(p => p.cover).length > visibleCount && (
