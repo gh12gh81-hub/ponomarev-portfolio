@@ -14,7 +14,7 @@ const translations = {
       areas: 'Области и услуги'
     },
     project: {
-      client: 'Клиент', tools: 'Инструменты', challenge: 'Задача', solution: 'Решение', next: 'Следующий проект',
+      client: 'Клиент', tools: 'Инструменты', challenge: 'Задача', solution: 'Решение', next: 'Следующий проект', previous: 'Предыдущий проект',
       loading: 'Загрузка...',
       error: 'Ошибка загрузки проектов. Попробуйте обновить страницу.',
       retry: 'Повторить'
@@ -126,7 +126,7 @@ const translations = {
       areas: 'Areas & Services'
     },
     project: {
-      client: 'Client', tools: 'Tools', challenge: 'Challenge', solution: 'Solution', next: 'Next Project',
+      client: 'Client', tools: 'Tools', challenge: 'Challenge', solution: 'Solution', next: 'Next Project', previous: 'Previous Project',
       loading: 'Loading...',
       error: 'Error loading projects. Please refresh the page.',
       retry: 'Retry'

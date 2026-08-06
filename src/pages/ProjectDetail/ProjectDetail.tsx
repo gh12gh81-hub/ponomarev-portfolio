@@ -46,6 +46,7 @@ export default function ProjectDetail() {
   const project = projects.find(p => p.slug === slug);
   const currentIndex = projects.findIndex(p => p.slug === slug);
   const nextProject = projects[(currentIndex + 1) % projects.length];
+  const previousProject = projects[(currentIndex - 1 + projects.length) % projects.length];
   const galleryMedia = project?.gallery
     .map(normalizeProjectMedia)
     .filter(media => media.src !== project.hero && media.src !== project.cover) ?? [];
@@ -444,6 +445,10 @@ export default function ProjectDetail() {
         <Link to={`/projects/${nextProject.slug}`}>
           <span className={styles.nextProjectLabel}>{t('project.next')}</span>
           <span className={styles.nextProjectTitle}>{nextProject.title} →</span>
+        </Link>
+        <Link to={`/projects/${previousProject.slug}`} className={styles.previousProjectLink}>
+          <span className={styles.nextProjectLabel}>{t('project.previous')}</span>
+          <span className={styles.nextProjectTitle}>← {previousProject.title}</span>
         </Link>
       </div>
 
