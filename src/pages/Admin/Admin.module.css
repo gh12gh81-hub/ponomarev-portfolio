@@ -79,7 +79,8 @@
 .textFields input,
 .textFields textarea,
 .mediaCard input,
-.galleryCard input {
+.galleryCard input,
+.galleryCard select {
   width: 100%;
   border: 1px solid #303030;
   border-radius: 0;
@@ -97,7 +98,8 @@
 .textFields input:focus,
 .textFields textarea:focus,
 .mediaCard input:focus,
-.galleryCard input:focus {
+.galleryCard input:focus,
+.galleryCard select:focus {
   border-color: #d00000;
   background: #171717;
 }

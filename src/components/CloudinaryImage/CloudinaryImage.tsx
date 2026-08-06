@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, type ReactEventHandler } from 'react'
 import styles from './CloudinaryImage.module.css'
 
 interface Props {
@@ -8,11 +8,12 @@ interface Props {
   width?: number
   loading?: 'lazy' | 'eager'
   sizes?: string
+  onLoad?: ReactEventHandler<HTMLImageElement>
 }
 
 export const getCloudinaryUrl = (src: string, width: number) => {
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-  return `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_${width}/${src}`
+  return `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,c_limit,w_${width}/${src}`
 }
 
 export const CloudinaryImage = memo(({
@@ -22,6 +23,7 @@ export const CloudinaryImage = memo(({
   width = 1200,
   loading = 'lazy',
   sizes = '100vw',
+  onLoad,
 }: Props) => {
   const candidates = [...new Set([480, 768, 1200, 1600, 2000, width]
     .filter(candidate => candidate <= width)
@@ -40,6 +42,7 @@ export const CloudinaryImage = memo(({
       className={`${styles.image} ${className || ''}`}
       loading={loading}
       decoding="async"
+      onLoad={onLoad}
     />
   )
 })

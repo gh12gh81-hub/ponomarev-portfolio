@@ -38,7 +38,13 @@ const galleryItem = (value, index) => {
   if (!type) throw new Error(`У медиафайла ${index + 1} указан неверный тип.`)
   const src = text(value.src, 500, `gallery ${index + 1} src`, true)
   const poster = text(value.poster, 500, `gallery ${index + 1} poster`)
-  return { type, src, ...(poster ? { poster } : {}) }
+  const layout = value.layout === 'half' ? 'half' : 'wide'
+  return {
+    type,
+    src,
+    ...(poster ? { poster } : {}),
+    ...(layout === 'half' ? { layout } : {}),
+  }
 }
 
 function normalizeProject(value, index) {

@@ -16,11 +16,13 @@ export interface ProjectTranslation {
 }
 
 export type ProjectMediaType = 'image' | 'video'
+export type ProjectMediaLayout = 'wide' | 'half'
 
 export interface ProjectMediaItem {
   type: ProjectMediaType
   src: string
   poster?: string
+  layout?: ProjectMediaLayout
 }
 
 export type ProjectGalleryItem = string | ProjectMediaItem

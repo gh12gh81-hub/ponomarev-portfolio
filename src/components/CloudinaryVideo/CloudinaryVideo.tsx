@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, type MouseEvent, type TouchEvent } from 'react'
+import { memo, useEffect, useRef, useState, type MouseEvent, type SyntheticEvent, type TouchEvent } from 'react'
 import { getCloudinaryUrl } from '@/components/CloudinaryImage/CloudinaryImage'
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
   onTouchStart?: (event: TouchEvent<HTMLVideoElement>) => void
   onTouchEnd?: (event: TouchEvent<HTMLVideoElement>) => void
   onTouchCancel?: (event: TouchEvent<HTMLVideoElement>) => void
+  onLoadedMetadata?: (event: SyntheticEvent<HTMLVideoElement>) => void
   onMutedChange?: (muted: boolean) => void
 }
 
@@ -52,6 +53,7 @@ export const CloudinaryVideo = memo(({
   onTouchStart,
   onTouchEnd,
   onTouchCancel,
+  onLoadedMetadata,
   onMutedChange,
 }: Props) => {
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -98,6 +100,7 @@ export const CloudinaryVideo = memo(({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       onTouchCancel={onTouchCancel}
+      onLoadedMetadata={onLoadedMetadata}
       onVolumeChange={event => {
         const nextMuted = event.currentTarget.muted
         setIsMuted(nextMuted)

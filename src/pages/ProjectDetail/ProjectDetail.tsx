@@ -49,12 +49,19 @@ export default function ProjectDetail() {
   const galleryMedia = project?.gallery
     .map(normalizeProjectMedia)
     .filter(media => media.src !== project.hero && media.src !== project.cover) ?? [];
+  const heroMedia = project
+    ? normalizeProjectMedia(project.hero || project.cover)
+    : null;
+  const lightboxMediaItems = heroMedia
+    ? [heroMedia, ...galleryMedia]
+    : galleryMedia;
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
   const [lightboxMuted, setLightboxMuted] = useState(true);
   const [lightboxCursor, setLightboxCursor] = useState<LightboxCursorAction | null>(null);
+  const [mediaAspectRatios, setMediaAspectRatios] = useState<Record<string, number>>({});
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const didSwipe = useRef(false);
   const glassCursorRef = useRef<HTMLDivElement | null>(null);
@@ -102,18 +109,18 @@ export default function ProjectDetail() {
   };
 
   const goPrev = () => {
-    if (galleryMedia.length === 0) return;
+    if (lightboxMediaItems.length === 0) return;
     setSlideDirection(-1);
     setLightboxMuted(true);
-    const newIndex = (currentImgIndex - 1 + galleryMedia.length) % galleryMedia.length;
+    const newIndex = (currentImgIndex - 1 + lightboxMediaItems.length) % lightboxMediaItems.length;
     setCurrentImgIndex(newIndex);
   };
 
   const goNext = () => {
-    if (galleryMedia.length === 0) return;
+    if (lightboxMediaItems.length === 0) return;
     setSlideDirection(1);
     setLightboxMuted(true);
-    const newIndex = (currentImgIndex + 1) % galleryMedia.length;
+    const newIndex = (currentImgIndex + 1) % lightboxMediaItems.length;
     setCurrentImgIndex(newIndex);
   };
 
@@ -206,7 +213,7 @@ export default function ProjectDetail() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen, currentImgIndex, galleryMedia.length]);
+  }, [lightboxOpen, currentImgIndex, lightboxMediaItems.length]);
 
   if (status === 'failed') {
     return (
@@ -269,14 +276,31 @@ export default function ProjectDetail() {
   const localizedDescription = getDescription();
   const localizedChallenge = getChallenge();
   const localizedSolution = getSolution();
-  const lightboxMedia = galleryMedia[currentImgIndex];
+  const lightboxMedia = lightboxMediaItems[currentImgIndex];
 
   const mediaLabel = (index: number) => language === 'ru'
     ? `Открыть медиафайл ${index + 1} проекта ${project.title}`
     : `Open media ${index + 1} from ${project.title}`;
 
+  const rememberMediaAspectRatio = (key: string, width: number, height: number) => {
+    if (width <= 0 || height <= 0) return;
+    const nextRatio = width / height;
+    setMediaAspectRatios(current => (
+      Math.abs((current[key] ?? 0) - nextRatio) < 0.001
+        ? current
+        : { ...current, [key]: nextRatio }
+    ));
+  };
+
+  const mediaAspectRatioStyle = (index: number, fallback: string) => {
+    const media = galleryMedia[index];
+    const ratio = mediaAspectRatios[`${media.type}:${media.src}`];
+    return { aspectRatio: ratio ? String(ratio) : fallback };
+  };
+
   const renderGalleryMedia = (index: number, width: number, sizes: string) => {
     const media = galleryMedia[index];
+    const mediaKey = `${media.type}:${media.src}`;
     if (media.type === 'video') {
       return (
         <CloudinaryVideo
@@ -288,6 +312,11 @@ export default function ProjectDetail() {
           muted
           preload="metadata"
           ariaLabel={`${project.title} - ${index + 1}`}
+          onLoadedMetadata={event => rememberMediaAspectRatio(
+            mediaKey,
+            event.currentTarget.videoWidth,
+            event.currentTarget.videoHeight,
+          )}
         />
       );
     }
@@ -297,6 +326,11 @@ export default function ProjectDetail() {
         alt={`${project.title} - ${index + 1}`}
         width={width}
         sizes={sizes}
+        onLoad={event => rememberMediaAspectRatio(
+          mediaKey,
+          event.currentTarget.naturalWidth,
+          event.currentTarget.naturalHeight,
+        )}
       />
     );
   };
@@ -321,11 +355,11 @@ export default function ProjectDetail() {
       <div className={styles.infoGrid}>
         <div className={styles.infoItem}>
           <h2>{t('project.client')}</h2>
-          <p>{getClient()}</p>
+          <p>{typography(getClient())}</p>
         </div>
         <div className={styles.infoItem}>
           <h2>{t('project.tools')}</h2>
-          <p>{project.tools || 'Figma, Illustrator'}</p>
+          <p>{typography(project.tools || 'Figma, Illustrator')}</p>
         </div>
 
         {localizedChallenge && (
@@ -342,50 +376,64 @@ export default function ProjectDetail() {
         )}
       </div>
 
-      <div className={styles.heroImage}>
+      <button
+        type="button"
+        className={styles.heroImage}
+        onClick={() => openLightbox(0)}
+        aria-label={language === 'ru'
+          ? `Открыть обложку проекта ${project.title}`
+          : `Open ${project.title} project cover`}
+      >
         <CloudinaryImage src={project.hero || project.cover} alt={project.title} width={2000} sizes="100vw" />
-      </div>
+      </button>
 
       <div className={styles.gallery}>
         {galleryMedia.length > 0 && (() => {
           const rows = [];
-          for (let i = 0; i < galleryMedia.length; i += 2) {
-            const media1 = galleryMedia[i];
-            const media2 = galleryMedia[i + 1];
+          for (let i = 0; i < galleryMedia.length;) {
+            const mediaIndex = i;
+            const media1 = galleryMedia[mediaIndex];
+            const media2 = galleryMedia[mediaIndex + 1];
+            const isHalfPair = media1.layout === 'half' && media2?.layout === 'half';
 
-            if (media2) {
+            if (isHalfPair) {
               rows.push(
-                <div key={`${media1.type}-${media1.src}-${i}`} className={styles.galleryItemHalf}>
+                <div key={`${media1.type}-${media1.src}-${mediaIndex}`} className={styles.galleryItemHalf}>
                   <button
                     type="button"
                     className={styles.clickableImage}
-                    onClick={() => openLightbox(i)}
-                    aria-label={mediaLabel(i)}
+                    style={mediaAspectRatioStyle(mediaIndex, '4 / 3')}
+                    onClick={() => openLightbox(mediaIndex + 1)}
+                    aria-label={mediaLabel(mediaIndex)}
                   >
-                    {renderGalleryMedia(i, 900, '(max-width: 768px) 100vw, 50vw')}
+                    {renderGalleryMedia(mediaIndex, 900, '(max-width: 768px) 100vw, 50vw')}
                   </button>
                   <button
                     type="button"
                     className={styles.clickableImage}
-                    onClick={() => openLightbox(i + 1)}
-                    aria-label={mediaLabel(i + 1)}
+                    style={mediaAspectRatioStyle(mediaIndex + 1, '4 / 3')}
+                    onClick={() => openLightbox(mediaIndex + 2)}
+                    aria-label={mediaLabel(mediaIndex + 1)}
                   >
-                    {renderGalleryMedia(i + 1, 900, '(max-width: 768px) 100vw, 50vw')}
+                    {renderGalleryMedia(mediaIndex + 1, 900, '(max-width: 768px) 100vw, 50vw')}
                   </button>
                 </div>
               );
+              i += 2;
             } else {
               rows.push(
                 <button
-                  key={`${media1.type}-${media1.src}-${i}`}
+                  key={`${media1.type}-${media1.src}-${mediaIndex}`}
                   type="button"
                   className={styles.galleryItemFull}
-                  onClick={() => openLightbox(i)}
-                  aria-label={mediaLabel(i)}
+                  style={mediaAspectRatioStyle(mediaIndex, '16 / 9')}
+                  onClick={() => openLightbox(mediaIndex + 1)}
+                  aria-label={mediaLabel(mediaIndex)}
                 >
-                  {renderGalleryMedia(i, 1600, '100vw')}
+                  {renderGalleryMedia(mediaIndex, 1600, '100vw')}
                 </button>
               );
+              i += 1;
             }
           }
           return rows;
@@ -401,7 +449,7 @@ export default function ProjectDetail() {
 
       {createPortal(
         <AnimatePresence>
-          {lightboxOpen && galleryMedia.length > 0 && lightboxMedia && (
+          {lightboxOpen && lightboxMediaItems.length > 0 && lightboxMedia && (
             <motion.div
               className={styles.lightbox}
               role="dialog"

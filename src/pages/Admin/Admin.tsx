@@ -451,7 +451,7 @@ export default function Admin() {
         if (itemIndex !== index) return item
         const current = normalizeProjectMedia(item)
         const next = { ...current, ...patch }
-        return createProjectMedia(next.type, next.src, next.poster)
+        return createProjectMedia(next.type, next.src, next.poster, next.layout)
       }),
     }))
   }
@@ -698,7 +698,7 @@ export default function Admin() {
                     onFiles={files => handleUpload('gallery', files)}
                   />
                 </div>
-                <p className={styles.helperText}>Фото — до 25 МБ, видео MP4, WebM или MOV — до 100 МБ. Перетаскивайте карточки или используйте стрелки. Файлы появятся на сайте после сохранения проекта.</p>
+                <p className={styles.helperText}>Фото — до 25 МБ, видео MP4, WebM или MOV — до 100 МБ. По умолчанию работа показывается крупно. Чтобы собрать ряд из двух работ, выберите «В паре с соседним» у обеих соседних карточек.</p>
                 <div className={styles.galleryGrid}>
                   {selectedProject.gallery.map((item, index) => {
                     const media = normalizeProjectMedia(item)
@@ -736,6 +736,17 @@ export default function Admin() {
                           <select value={media.type} onChange={event => updateGalleryItem(index, { type: event.target.value === 'video' ? 'video' : 'image' })}>
                             <option value="image">Изображение</option>
                             <option value="video">Видео</option>
+                          </select>
+                        </label>
+                        <label>
+                          <span>Подача в кейсе</span>
+                          <select
+                            value={media.layout || 'wide'}
+                            onChange={event => updateGalleryItem(index, { layout: event.target.value === 'half' ? 'half' : 'wide' })}
+                            aria-label={`Формат показа медиафайла ${index + 1}`}
+                          >
+                            <option value="wide">Крупно, отдельным рядом</option>
+                            <option value="half">В паре с соседним</option>
                           </select>
                         </label>
                         <label>

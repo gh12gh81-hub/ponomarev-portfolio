@@ -84,10 +84,11 @@ const validated = validateProjects(currentProjects)
 assert(validated.projects.length === currentProjects.length, 'Project validation changed project count')
 
 const projectsWithVideo = structuredClone(currentProjects)
-projectsWithVideo[0].gallery.push({ type: 'video', src: 'portfolio/projects/test/demo', poster: 'portfolio/projects/test/poster' })
+projectsWithVideo[0].gallery.push({ type: 'video', src: 'portfolio/projects/test/demo', poster: 'portfolio/projects/test/poster', layout: 'half' })
 const validatedWithVideo = validateProjects(projectsWithVideo)
 const validatedVideo = validatedWithVideo.projects[0].gallery.at(-1)
 assert(validatedVideo.type === 'video' && validatedVideo.src.endsWith('/demo'), 'Video gallery validation failed')
+assert(validatedVideo.layout === 'half', 'Gallery layout validation failed')
 
 let invalidRejected = false
 try {

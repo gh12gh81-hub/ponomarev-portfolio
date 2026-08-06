@@ -137,6 +137,33 @@ export function ServiceDetailPage({ serviceKey }: { serviceKey: ServiceKey }) {
         </div>
       </section>
 
+      <section className={styles.selectedWork}>
+        <div className={styles.sectionHeader}>
+          <h2>{copy.projectsTitle}</h2>
+          <p>{typography(copy.projectsIntro)}</p>
+        </div>
+        {relatedProjects.length > 0 ? (
+          <div className={styles.projectGrid}>
+          {relatedProjects.map(project => (
+            <Link className={styles.projectCard} to={`/projects/${project.slug}`} key={project.slug}>
+              <div className={styles.projectImage}>
+                <CloudinaryImage
+                  src={project.cover}
+                  alt={project.title}
+                  width={1200}
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
+              <span className={styles.projectCategory}>{typography(project.category)}</span>
+              <h3>{project.title}<span aria-hidden="true"> →</span></h3>
+            </Link>
+          ))}
+          </div>
+        ) : status === 'succeeded' ? (
+          <p className={styles.emptyProjects}>{typography(copy.emptyProjects)}</p>
+        ) : null}
+      </section>
+
       <section className={styles.storyBlock}>
         <div className={styles.storyItem}>
           <h2>{t(`${serviceKey}.certTitle`)}</h2>
@@ -155,14 +182,14 @@ export function ServiceDetailPage({ serviceKey }: { serviceKey: ServiceKey }) {
       <section className={styles.processBlock}>
         <div className={styles.sectionHeader}>
           <h2>{copy.processTitle}</h2>
-          <p>{copy.processIntro}</p>
+          <p>{typography(copy.processIntro)}</p>
         </div>
         <div className={styles.processGrid}>
           {copy.process.map(([stepTitle, stepText], index) => (
             <article className={styles.processStep} key={stepTitle}>
               <span className={styles.stepNumber}>0{index + 1}</span>
               <h3>{stepTitle}</h3>
-              <p>{stepText}</p>
+              <p>{typography(stepText)}</p>
             </article>
           ))}
         </div>
@@ -172,42 +199,15 @@ export function ServiceDetailPage({ serviceKey }: { serviceKey: ServiceKey }) {
         <h2>{copy.deliverablesTitle}</h2>
         <ul className={styles.deliverablesList}>
           {data.deliverables[language].map(item => (
-            <li key={item}><span>{item}</span><span aria-hidden="true">↗</span></li>
+            <li key={item}><span>{typography(item)}</span><span aria-hidden="true">↗</span></li>
           ))}
         </ul>
-      </section>
-
-      <section className={styles.selectedWork}>
-        <div className={styles.sectionHeader}>
-          <h2>{copy.projectsTitle}</h2>
-          <p>{copy.projectsIntro}</p>
-        </div>
-        {relatedProjects.length > 0 ? (
-          <div className={styles.projectGrid}>
-          {relatedProjects.map(project => (
-            <Link className={styles.projectCard} to={`/projects/${project.slug}`} key={project.slug}>
-              <div className={styles.projectImage}>
-                <CloudinaryImage
-                  src={project.cover}
-                  alt={project.title}
-                  width={1200}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <span className={styles.projectCategory}>{project.category}</span>
-              <h3>{project.title}<span aria-hidden="true"> →</span></h3>
-            </Link>
-          ))}
-          </div>
-        ) : status === 'succeeded' ? (
-          <p className={styles.emptyProjects}>{copy.emptyProjects}</p>
-        ) : null}
       </section>
 
       <section className={styles.serviceCta}>
         <div>
           <h2>{copy.ctaTitle}</h2>
-          <p>{copy.ctaText}</p>
+          <p>{typography(copy.ctaText)}</p>
         </div>
         <Link to="/contacts" className={styles.ctaButton}>{copy.ctaButton}<span aria-hidden="true"> →</span></Link>
       </section>
