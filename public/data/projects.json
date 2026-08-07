@@ -491,10 +491,10 @@
         "solution": "В процессе разработки платформы «VK Маруся» использовались навыки веб-вёрстки, JavaScript, TypeScript и React."
       },
       "en": {
-        "client": "",
-        "description": "",
-        "challenge": "",
-        "solution": ""
+        "client": "VK",
+        "description": "An online platform, 'VK Marusya,' which will allow users to find and rate movies.",
+        "challenge": "The task is to create a movie search feature, set up the ability to rate them, and make sure the app is simple and easy to use.",
+        "solution": "In the process of developing the 'VK Marusya' platform, I used skills in web layout, JavaScript, TypeScript, and React."
       }
     },
     "description": "Онлайн-платформу «VK Маруся», которая позволит пользователям находить и оценивать фильмы.",
