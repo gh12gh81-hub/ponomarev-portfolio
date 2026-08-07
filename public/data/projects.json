@@ -473,5 +473,44 @@
       "portfolio/projects/travelblog/1_PM_dowyzm",
       "portfolio/projects/travelblog/2_PM_ivvp8w"
     ]
+  },
+  {
+    "id": 11,
+    "title": "VK Маруся",
+    "slug": "vk",
+    "year": "2026",
+    "category": "UI / UX",
+    "services": [
+      "ui-ux"
+    ],
+    "translations": {
+      "ru": {
+        "client": "VK",
+        "description": "Онлайн-платформу «VK Маруся», которая позволит пользователям находить и оценивать фильмы.",
+        "challenge": "Задача — создать функциональность поиска фильмов, настроить возможность их оценки \nи обеспечить простоту и удобство использования приложения.",
+        "solution": "В процессе разработки платформы «VK Маруся» использовались навыки веб-вёрстки, JavaScript, TypeScript и React."
+      },
+      "en": {
+        "client": "",
+        "description": "",
+        "challenge": "",
+        "solution": ""
+      }
+    },
+    "description": "Онлайн-платформу «VK Маруся», которая позволит пользователям находить и оценивать фильмы.",
+    "layout": "square",
+    "client": "VK",
+    "tools": "Figma, Frontend Development",
+    "challenge": "Задача — создать функциональность поиска фильмов, настроить возможность их оценки \nи обеспечить простоту и удобство использования приложения.",
+    "solution": "В процессе разработки платформы «VK Маруся» использовались навыки веб-вёрстки, JavaScript, TypeScript и React.",
+    "cover": "portfolio/projects/vk/маруся_white_yiuakh",
+    "hero": "portfolio/projects/vk/white_v6ixio",
+    "banner": "",
+    "gallery": [
+      "portfolio/projects/vk/VK-Маруся-1_hbnvxn",
+      "portfolio/projects/vk/VK-Маруся-2_g1mao8",
+      "portfolio/projects/vk/VK-Маруся-3_dptr3o",
+      "portfolio/projects/vk/4_AM_r4txzy"
+    ]
   }
 ]
